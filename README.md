@@ -1,6 +1,6 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/teched2023-IN260)](https://api.reuse.software/info/github.com/SAP-samples/teched2023-IN260)
 
-# Session ID - Session Title
+# IN260 - Resilient Integration of SAP Solutions on SAP BTP
 
 ## Description
 
