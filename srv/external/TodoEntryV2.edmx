@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:atom="http://www.w3.org/2005/Atom">
+    <edmx:DataServices m:DataServiceVersion="2.0"
+        xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+        <Schema Namespace="SFODataSet" xmlns="http://schemas.microsoft.com/ado/2008/09/edm"
+            xmlns:sf="http://www.successfactors.com/edm/sf"
+            xmlns:sap="http://www.sap.com/Protocols/SAPData">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="Todo" EntityType="SFOData.Todo" sap:label="Todo"
+                    sap:creatable="false" sap:updatable="false" sap:upsertable="false"
+                    sap:deletable="false">
+                    <Documentation>
+                        <Summary>Todo</Summary>
+                        <LongDescription>Contains the list of tasks (Todos') assigned to a user.
+                            Todos can be classified into different categories and map to different
+                            functional areas in the HCM Suite.</LongDescription>
+                        <sap:tagcollection>
+                            <sap:tag>Foundation/Platform (PLT)</sap:tag>
+                            <sap:tag>PLT - Todo</sap:tag>
+                        </sap:tagcollection>
+                    </Documentation>
+                </EntitySet>
+                <EntitySet Name="TodoEntryV2" EntityType="SFOData.TodoEntryV2"
+                    sap:label="TodoEntryV2" sap:creatable="true" sap:updatable="true"
+                    sap:upsertable="true" sap:deletable="true">
+                    <Documentation>
+                        <Summary>TodoEntryV2</Summary>
+                        <LongDescription>This entity is to support TodoEntry Edit Support</LongDescription>
+                        <sap:tagcollection>
+                            <sap:tag>Foundation/Platform (PLT)</sap:tag>
+                            <sap:tag>PLT - Todo</sap:tag>
+                        </sap:tagcollection>
+                    </Documentation>
+                </EntitySet>
+            </EntityContainer>
+        </Schema>
+        <Schema Namespace="SFOData" xmlns="http://schemas.microsoft.com/ado/2008/09/edm"
+            xmlns:sf="http://www.successfactors.com/edm/sf"
+            xmlns:sap="http://www.successfactors.com/edm/sap">
+            <EntityType Name="Todo">
+                <Key>
+                    <PropertyRef Name="categoryId"></PropertyRef>
+                </Key>
+                <Property Name="categoryId" Type="Edm.String" Nullable="false" sap:required="true"
+                    sap:creatable="false" sap:updatable="false" sap:upsertable="false"
+                    sap:visible="true" sap:sortable="true" sap:filterable="true"
+                    sap:label="categoryId"></Property>
+                <Property Name="categoryLabel" Type="Edm.String" Nullable="true"
+                    sap:required="false" sap:creatable="false" sap:updatable="false"
+                    sap:upsertable="false" sap:visible="true" sap:sortable="false"
+                    sap:filterable="false" sap:label="categoryLabel"></Property>
+                <Property Name="displayOrder" Type="Edm.Int32" Nullable="true" sap:required="false"
+                    sap:creatable="false" sap:updatable="false" sap:upsertable="false"
+                    sap:visible="true" sap:sortable="true" sap:filterable="false"
+                    sap:label="displayOrder"></Property>
+                <Property Name="status" Type="Edm.Int32" Nullable="true" sap:required="false"
+                    sap:creatable="false" sap:updatable="false" sap:upsertable="false"
+                    sap:visible="false" sap:sortable="false" sap:filterable="true"
+                    sap:label="status"></Property>
+            </EntityType>
+            <EntityType Name="TodoEntryV2">
+                <Key>
+                    <PropertyRef Name="todoEntryId"></PropertyRef>
+                </Key>
+                <Property Name="categoryId" Type="Edm.String" Nullable="false" sap:required="true"
+                    sap:creatable="true" sap:updatable="false" sap:upsertable="true"
+                    sap:visible="true" sap:sortable="true" sap:filterable="true"
+                    sap:label="categoryId"></Property>
+                <Property Name="categoryLabel" Type="Edm.String" Nullable="true"
+                    sap:required="false" sap:creatable="false" sap:updatable="false"
+                    sap:upsertable="false" sap:visible="true" sap:sortable="false"
+                    sap:filterable="false" sap:label="categoryLabel"></Property>
+                <Property Name="completedDateTime" Type="Edm.DateTimeOffset" Nullable="true"
+                    sap:required="false" sap:creatable="false" sap:updatable="false"
+                    sap:upsertable="false" sap:visible="true" sap:sortable="true"
+                    sap:filterable="true" sap:label="completedDateTime"></Property>
+                <Property Name="createdDate" Type="Edm.DateTimeOffset" Nullable="false"
+                    sap:required="false" sap:creatable="false" sap:updatable="false"
+                    sap:upsertable="false" sap:visible="true" sap:sortable="true"
+                    sap:filterable="true" sap:label="createDate"></Property>
+                <Property Name="dueDate" Type="Edm.DateTimeOffset" Nullable="false"
+                    sap:required="true" sap:creatable="true" sap:updatable="true"
+                    sap:upsertable="true" sap:visible="true" sap:sortable="true"
+                    sap:filterable="true" sap:label="dueDate"></Property>
+                <Property Name="formDataId" Type="Edm.Int32" Nullable="true" sap:required="false"
+                    sap:creatable="true" sap:updatable="true" sap:upsertable="true"
+                    sap:visible="true" sap:sortable="true" sap:filterable="true"
+                    sap:label="formDataId"></Property>
+                <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" Nullable="false"
+                    sap:required="false" sap:creatable="false" sap:updatable="false"
+                    sap:upsertable="false" sap:visible="true" sap:sortable="true"
+                    sap:filterable="true" sap:label="lastModifedDateTime"></Property>
+                <Property Name="linkUrl" Type="Edm.String" Nullable="true" sap:required="false"
+                    sap:creatable="true" sap:updatable="true" sap:upsertable="true"
+                    sap:visible="true" sap:sortable="false" sap:filterable="false" MaxLength="2000"
+                    sap:label="linkUrl"></Property>
+                <Property Name="status" Type="Edm.Int32" Nullable="false" sap:required="true"
+                    sap:creatable="true" sap:updatable="true" sap:upsertable="true"
+                    sap:visible="true" sap:sortable="true" sap:filterable="true" sap:label="status"></Property>
+                <Property Name="subjectId" Type="Edm.String" Nullable="true" sap:required="false"
+                    sap:creatable="true" sap:updatable="true" sap:upsertable="true"
+                    sap:visible="true" sap:sortable="true" sap:filterable="true" MaxLength="100"
+                    sap:label="subjectId"></Property>
+                <Property Name="todoEntryId" Type="Edm.Decimal" Nullable="false"
+                    sap:required="false" sap:creatable="false" sap:updatable="true"
+                    sap:upsertable="true" sap:visible="true" sap:sortable="true"
+                    sap:filterable="true" sap:label="todoEntryId"></Property>
+                <Property Name="todoEntryName" Type="Edm.String" Nullable="false"
+                    sap:required="true" sap:creatable="true" sap:updatable="true"
+                    sap:upsertable="true" sap:visible="true" sap:sortable="false"
+                    sap:filterable="false" sap:label="todoEntryName"></Property>
+            </EntityType>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

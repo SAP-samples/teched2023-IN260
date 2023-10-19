@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Smart ToDo Service</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/primitive-ui/dist/css/main.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+      .hovering tr:hover td {
+        color: cyan;
+        background: #123;
+        cursor: pointer;
+      }
+      .rating-stars {
+        color: teal;
+      }
+      .succeeded {
+        color: teal;
+      }
+      .failed {
+        color: red;
+      }
+      .user {
+        text-align: end;
+        color: grey;
+      }
+      .languageToggleView {
+        display: inline-flex;
+        flex-direction: row;
+        margin-bottom: 1rem;
+      }
+      .languageToggleLabel.js {
+        color: orange;
+        margin: 0 1rem 0 0;
+        
+      }
+      .languageToggleLabel.java {
+        color: #428fd3;
+        margin: 0 1rem 0 0;
+      }
+      .languageToggle {
+        margin: 0 1rem 0 0;
+      }
+
+      .flex-row {
+        margin: 0;
+      }
+
+      .ai {
+        display: flex;
+        flex-direction: column;
+        background: #f8f8f8;
+        padding: 1rem 2rem;
+        margin-bottom: 1rem;
+        border-radius: 0.25rem;
+      }
+
+      .ai .buttons {
+        justify-content: end;
+      }
+      
+      .header {
+        align-items: center;
+      }
+
+      .weekend {
+        background: rgb(244, 67, 54);
+        border: rgb(244, 67, 54);
+        font-weight: bold;
+        font-size: larger;
+      }
+    </style>
+  </head>
+
+  <body class="small-container" style="margin-top: 70px">
+    <div id="app">
+      <div class="header flex-row space-between">
+        <h1>Your ToDo List</h1>
+        <button class="weekend round-button" @click="quit">
+          I've had enough! Start weekend!
+        </button>
+      </div>
+
+
+      <table id="todos" class="hovering">
+        <thead>
+          <th>#</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Status</th>
+        </thead>
+        <tr v-for="(todo, i) in todos" v-bind:id="todo.ID">
+          <td>{{ i+1 }}</td>
+          <td>{{ todo.title }}</td>
+          <td>{{ todo.description }}</td>
+          <td>{{ todo.status }}</td>
+        </tr>
+      </table>
+      <div class="ai space-between">
+        <h5>Here is a suggestion on what to do next:</h5>
+
+        <p><i>{{ suggestion.title }} - {{ suggestion.description }}</i></p>
+        <div class="buttons flex-row align-center">
+          <button class="round-button accent-button" @click="addTodo">
+            Add
+          </button>
+          <button
+            class="round-button"
+            style="margin-left: 0.5rem"
+            @click="regenerateTodo"
+          >
+            Regenerate
+          </button>
+        </div>
+      </div>
+      <div class="align-center userInput flex-row">
+        <form>
+          <label for="user" class="flex-large">User:</label>
+          <select v-model="selectedUser" id="user" class="flex-small" @change="fetchTodosForUser">
+            <option disabled selected>Please select</option>
+            <option value="ALKHASLEY">Alkhasley</option>
+            <option value="ALICE">Alice</option>
+            <option value="BOB">Bob</option>
+          </select>
+        </form>
+      </div>
+    </div>
+  </body>
+
+  <script src="app.js"></script>
+</html>

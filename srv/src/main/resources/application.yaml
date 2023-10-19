@@ -1,0 +1,21 @@
+---
+cds:
+  datasource:
+    auto-config.enabled: false
+  remote.services:
+    - name: "TodoEntryV2"
+      destination:
+        name: "TODO_SERVICE"
+        type: "odata-v2"
+        suffix: "/odata/v2"
+        service: "TodoEntryV2"
+# ---
+# spring:
+#   config.activate.on-profile: local
+logging:
+  level:
+    # org.springframework: DEBUG
+    # org.springframework.security: DEBUG
+    com.sap.cloud.sdk: DEBUG
+    com.sap.cds: DEBUG
+    # org.apache.http.wire: DEBUG
