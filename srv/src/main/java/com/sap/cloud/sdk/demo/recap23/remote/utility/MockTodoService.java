@@ -51,6 +51,7 @@ public class MockTodoService {
             @RequestParam(value = "$filter", defaultValue = "") String filter
     ) {
         filter = filter.replaceFirst("^userId eq \\W(.*)\\W$", "$1");
+        flaky(filter);
         var entries = store.computeIfAbsent(filter, this::createItems);
         return ResponseEntity.ok(
             Collections.singletonMap("d",
@@ -67,6 +68,7 @@ public class MockTodoService {
         }
         var uri = ((Map<?, ?>) ((Map<?, ?>) userNav).get("__metadata")).get("uri").toString();
         uri = uri.replaceFirst("^.*\\(\\W(.*)\\W\\)$", "$1");
+        flaky(uri);
         store.computeIfAbsent(uri, this::createItems).add(todo);
     }
 
@@ -95,5 +97,21 @@ public class MockTodoService {
                 .status(PRESET_STATUS)
                 .build())
             .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private void flaky(String userId) {
+        var flakyMatch = Pattern.compile("\\.([df])(\\d+)$").matcher(userId);
+        if(!flakyMatch.find()) {
+            return;
+        }
+        var num = Integer.parseInt(flakyMatch.group(2));
+        switch (flakyMatch.group(1)) {
+            case "d":
+                try { Thread.sleep(num); } catch (InterruptedException e) { /* delay interrupted */ }
+                break;
+            case "f":
+                if(rnd.nextInt(100)< num) { throw new RuntimeException("Flaky service."); }
+                break;
+        }
     }
 }
