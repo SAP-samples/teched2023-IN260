@@ -3,7 +3,9 @@ package com.sap.cloud.sdk.demo.recap23.remote.utility;
 import cloudsdk.gen.namespaces.todoentryv2.TodoEntryV2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -67,10 +70,21 @@ public class MockTodoService {
         store.computeIfAbsent(uri, this::createItems).add(todo);
     }
 
+    @DeleteMapping("TodoEntryV2({id})")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    protected void deleteTodo( @PathVariable String id ) {
+        var numMach = Pattern.compile("\\d+").matcher(id);
+        if(!numMach.find()) {
+            throw new IllegalArgumentException("Invalid id.");
+        }
+        var num = new BigDecimal(numMach.group());
+        store.values().forEach(list -> list.removeIf(todo -> num.equals(todo.getTodoEntryId())));
+    }
+
     private List<TodoEntryV2> createItems(String filter) {
         var baseId = Math.abs(filter.hashCode()%1000000);
         var baseDate = ZonedDateTime.now().minusDays(1);
-        return IntStream.rangeClosed(MIN_NUM_START, rnd.nextInt(MIN_NUM_START, MAX_NUM_START+1))
+        return IntStream.rangeClosed(1, rnd.nextInt(MIN_NUM_START, MAX_NUM_START+1))
             .mapToObj(i -> TodoEntryV2.builder()
                 .todoEntryId(new BigDecimal(baseId+i))
                 .todoEntryName(PRESET_TODOS[(baseId+i)%PRESET_TODOS.length])
