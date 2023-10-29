@@ -1,4 +1,4 @@
-# Asynchronous Operations
+# Exercise 3: Asynchronous Operations
 
 One can make an application more resilient by running some tasks asynchronously. This often applies to tasks that don't need to succeed immediately.
 

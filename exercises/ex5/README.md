@@ -13,6 +13,8 @@ For now, we'll be focussing on the first two patterns in this exercise.
 
 ### Motivation
 
+//TODO update this to better match slides
+
 The exercise explores optional code improvements.
 The benefits may not be directly visible, but they are important for a productive application runtime.
 If your application serves multiple tenants or principals, or if it interacts with a multitude of external systems, then it will probably receive unbalanced computational load - depending on the context.
@@ -45,6 +47,8 @@ In order to protect yourself from this, you can use the resilience patterns prov
 
 Imagine, the interaction with SAP SuccessFactors is not very reliable, maybe it loads too long without any result.
 To improve user experience in the web application, it would be worthwhile to interrupt the lasting request and show a message to the user. 
+
+//TODO add disclaimer that this is a temporary workaround
 
 - [ ] Extend the `main` method in [`Application`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class by:
    ```diff
@@ -89,7 +93,7 @@ In order to test the resilience patterns locally, we need to direct our requests
 Congratulations, you have successfully tested the timeout resilience pattern.
 Please feel free to play around with the delay and resilience timeout configuration to see how the application behaves.
 
-## 5.4 - (Optional) Use the Retry Pattern
+## 5.4 - Use the Retry Pattern
 
 - [ ] Extend the `RESILIENCE_CONFIG` declaration to add retry configuration in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
    ```diff
@@ -112,7 +116,11 @@ Please feel free to play around with number of delays, to make the effect more v
 If you add delay, you can check which one fails first - the retry or time-limiter.
 In production, you will need to make a reasonable decision for these settings, depending on the target system.
 
-## 5.5 - (Optional) Use the Rate-Limiter Pattern
+// TODO add optional section on choosing exceptions to retry
+
+## 5.5 - Use the Rate-Limiter Pattern
+
+// TODO motivation
 
 - [ ] Extend the `RESILIENCE_CONFIG` declaration to add rate limiter configuration in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
    ```diff
@@ -128,6 +136,7 @@ In production, you will need to make a reasonable decision for these settings, d
 
 That's it, now let's test the rate limiter resilience pattern.
 
+// TODO formatting
 
 - Open the application frontend at `http://localhost:8080/#resilience`.
 - Keep failure rate and delay at `0`.
@@ -135,6 +144,10 @@ That's it, now let's test the rate limiter resilience pattern.
    At some point, you will notice a 1s delay.
 
 Please feel free to play around with the time-limiter and rate-limiter configuration to make this effect more visible.
+
+// TODO add section on isolation levels
+
+// TODO add optional section on circuit breaker
 
 ## Summary
 

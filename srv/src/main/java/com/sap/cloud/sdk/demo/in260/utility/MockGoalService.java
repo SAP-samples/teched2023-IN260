@@ -3,6 +3,7 @@ package com.sap.cloud.sdk.demo.in260.utility;
 import cloudsdk.gen.namespaces.goal.GoalPermission_101;
 import cloudsdk.gen.namespaces.goal.GoalTask_101;
 import cloudsdk.gen.namespaces.goal.Goal_101;
+import com.sap.cloud.sdk.cloudplatform.connectivity.DestinationProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +44,11 @@ public class MockGoalService {
         @Nonnull
         @Override
         public List<Header> getHeaders(@Nonnull DestinationRequestContext context ) {
+            if ( !context.getDestination().get(DestinationProperty.NAME).contains("SFSF-BASIC-ADMIN")){
+                return Collections.emptyList();
+            }
             var result = new ArrayList<Header>();
             var headers = RequestHeaderAccessor.getHeaderContainer();
-            // consider dest filter
             headers.getHeaderValues("delay").forEach(s -> result.add(new Header("delay", s)));
             headers.getHeaderValues("fault").forEach(s -> result.add(new Header("fault", s)));
             return result;
