@@ -1,0 +1,12 @@
+---
+applications:
+- name: approuter
+  path: ./
+  memory: 128M
+  buildpack: nodejs_buildpack
+  env:
+    destinations: '[{"name":"app-destination", "url" :"https://in260-backend.cfapps.eu10-004.hana.ondemand.com", "forwardAuthToken": true, "timeout": 3600000}]'
+  services:
+    - xsuaa
+  routes:
+    - route: in260.cfapps.eu10-004.hana.ondemand.com

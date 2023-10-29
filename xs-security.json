@@ -1,0 +1,9 @@
+{
+    "xsappname": "in260",
+    "tenant-mode": "dedicated",
+    "oauth2-configuration": {
+        "token-validity": 1800,
+        "grant-types": ["client_credentials", "password", "authorization_code"],
+        "redirect-uris": ["https://in260.cfapps.eu10-004.hana.ondemand.com"]
+    }
+}

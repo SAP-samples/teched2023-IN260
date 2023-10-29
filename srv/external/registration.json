@@ -1,0 +1,252 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Event Registration Service",
+    "description": "This service is used to sign up users to events and sessions. Happy learning!",
+    "termsOfService": "https://github.com/SAP-samples/teched2023-AD266",
+    "contact": {
+      "email": "cloudsdk@sap.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11"
+  },
+  "servers": [
+    {
+      "url": "https://ad266-registration.cfapps.eu10-004.hana.ondemand.com"
+    }
+  ],
+  "paths": {
+    "/events": {
+      "get": {
+        "x-sap-cloud-sdk-api-name": "EventRegistrationApi",
+        "x-sap-cloud-sdk-operation-name": "getEvents",
+        "summary": "Get a list of events",
+        "responses": {
+          "200": {
+            "description": "List of events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "nullable": false,
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Event 1",
+                    "sessionIDs": [101, 102]
+                  },
+                  {
+                    "id": 2,
+                    "name": "Event 2",
+                    "sessionIDs": []
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}": {
+      "parameters": [
+        {
+          "name": "eventId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "Event ID"
+        }
+      ],
+      "get": {
+        "x-sap-cloud-sdk-api-name": "EventRegistrationApi",
+        "x-sap-cloud-sdk-operation-name": "getEventById",
+        "summary": "Get event details by ID",
+        "responses": {
+          "200": {
+            "description": "Event details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                },
+                "example": {
+                  "id": 1,
+                  "name": "Event 1",
+                  "sessions": [
+                    {
+                      "id": 101,
+                      "title": "Session A",
+                      "duration": 60,
+                      "location": "Location A"
+                    },
+                    {
+                      "id": 102,
+                      "title": "Session B",
+                      "duration": 90,
+                      "location": "Location B"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/register": {
+      "parameters": [
+        {
+          "name": "eventId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "Event ID"
+        }
+      ],
+      "post": {
+        "x-sap-cloud-sdk-api-name": "EventRegistrationApi",
+        "x-sap-cloud-sdk-operation-name": "registerForEvent",
+        "summary": "Register for this event",
+        "responses": {
+          "201": {
+            "description": "Registration successful"
+          }
+        }
+      }
+    },
+    "/events/{eventId}/sessions": {
+      "parameters": [
+        {
+          "name": "eventId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "Event ID"
+        }
+      ],
+      "get": {
+        "x-sap-cloud-sdk-api-name": "EventRegistrationApi",
+        "x-sap-cloud-sdk-operation-name": "getSessions",
+        "summary": "Get a list of sessions for an event",
+        "responses": {
+          "200": {
+            "description": "List of sessions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Session"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 101,
+                    "title": "Session A",
+                    "duration": 60,
+                    "location": "Location A"
+                  },
+                  {
+                    "id": 102,
+                    "title": "Session B",
+                    "duration": 90,
+                    "location": "Location B"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{eventId}/sessions/{sessionId}/register": {
+      "parameters": [
+        {
+          "name": "eventId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "Event ID"
+        },
+        {
+          "name": "sessionId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "Session ID"
+        }
+      ],
+      "post": {
+        "x-sap-cloud-sdk-api-name": "EventRegistrationApi",
+        "x-sap-cloud-sdk-operation-name": "registerForSession",
+        "summary": "Register for a session",
+        "responses": {
+          "201": {
+            "description": "Successfully Registered for the session"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier for the event"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the event"
+          },
+          "sessionIDs": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier for the session"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the session"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "The duration of the session in minutes"
+          },
+          "location": {
+            "type": "string",
+            "description": "The location of the session"
+          }
+        }
+      }
+    }
+  }
+}

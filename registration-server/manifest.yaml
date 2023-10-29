@@ -1,0 +1,10 @@
+# manifest to deploy node app to Cloud Foundry
+---
+applications:
+  - name: registration-service
+    routes:
+      - route: ad266-registration.cfapps.eu10-004.hana.ondemand.com
+    path: .
+    memory: 128M
+    disk_quota: 512M
+    buildpack: nodejs_buildpack

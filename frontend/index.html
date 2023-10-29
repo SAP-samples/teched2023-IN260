@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Event Registration</title>
+  <style>
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: auto;
+      padding:1em;
+    }
+    body::before {
+      content: "";
+      z-index:-1;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #88dd88, #8888dd);
+      background-size: 150% 150%;
+      animation: gradientAnimation 20s infinite;
+    }
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+    #eventList span {
+      display: inline-block;
+      padding: 0.5em 1em;
+      font-size: 1.5em;
+      border: 1px solid #666;
+      border-radius: 0.3em;
+      text-align: center;
+      color: #335699;
+      font-weight: bold;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+    #eventList label:hover span { background-position: 100% 0; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15); }
+    #eventList label:hover { cursor: pointer; }
+    #eventList label > input { display: none; }
+    #eventList label > input[disabled]:checked + *:before { content:'✔️'; transform: rotate(0); }
+    #eventList label > input:checked + *:before { content:'⌛'; transform: rotate(10deg); }
+    #eventList label > input:active + *:before { content:'⌛'; transform: rotate(-10deg); }
+    #eventList label > input + *:before { content:'✖️'; vertical-align: top; display: inline-block; margin: 0.3em 0.3em 0 0; font-size:0.6em; }
+    #eventList label { display:block; margin: 1em; }
+    #eventList > div:before { content: attr(alt); font-size: 1.5em; border-bottom: 2px dashed; }
+
+    #resilience {
+      display: none;
+      width: 13em;
+      position: absolute;
+      top: 2em;
+      right: 2em;
+      border: 1px solid #333;
+      background: rgba(120, 120, 120, 0.3);
+      padding: 1em;
+      border-radius: 0.5em;
+    }
+    #resilience:target { display: block; }
+    #resilience > label { display: inline-block; width: 60%; padding: 0.3em 0; }
+    #resilience > input { display: inline-block; width: 30%; }
+  </style>
+</head>
+<body>
+<h1>Event Registration</h1>
+<div id="eventList">
+  <!-- Events will be displayed here -->
+  <!--
+  <label for="a" onchange="registerForEvent('a')"><input id="a" type="radio"/><span>Fooo</span></label>
+  <label for="b" onchange="registerForEvent('b')"><input id="b" type="radio"/><span>Bar</span></label>
+  -->
+</div>
+
+<div id="resilience">
+  <label for="delay">Delay (ms):</label>
+  <input type="number" id="delay" value="0" min="0" max="60000" step="500"/>
+  <label for="fault">Fault rate (%):</label>
+  <input type="number" id="fault" value="0" min="0" max="100" step="10"/>
+</div>
+
+<script>
+  // Function to serialize a session
+  function serialize(session) {
+    return '<label for="i'+session.id+'" onchange="registerForEvent(\''+session.id+'\',\''+session.title+'\')">'
+      + '<input id="i'+session.id+'" type="radio"/>'
+      + '<span>'+session.title+'</span>'
+      + '</label>'
+  }
+
+  // Fetch events and sessions
+  fetch('https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/events')
+    .then((response) => response.json())
+    .then((events) => {
+      const eventList = document.getElementById('eventList');
+      events.forEach((event) => {
+        const eventDiv = document.createElement('div');
+        eventDiv.setAttribute('id', event.id);
+        eventDiv.setAttribute('alt', event.name);
+        eventList.appendChild(eventDiv);
+
+        fetch('https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/events/' + event.id + '/sessions')
+        .then((response) => response.json())
+        .then((sessions) => sessions.forEach((s) => eventDiv.innerHTML += serialize(s)))
+        .catch((error) => alert('Error fetching sessions:', error));
+      });
+    })
+    .catch((error) => alert('Error fetching events:', error));
+
+
+  // Function to register for an event
+  function registerForEvent(eventId, eventName) {
+    const delay = document.getElementById('delay').value;
+    const fault = document.getElementById('fault').value;
+    fetch("/odata/v4/SignupService/signUp", {
+      method: "POST",
+      body: JSON.stringify({ session: eventName }),
+      headers: { "Content-type": "application/json; charset=UTF-8", delay: delay, fault: fault }
+    })
+    .then((response) => response.json())
+    .then((response) => {
+      if(response.error) {
+        throw new Error("Unable to register for session: " + response.error.message);
+      }
+      document.getElementById('i'+eventId).disabled = true;
+      return response.value;
+    })
+    .catch((error) => {
+      alert('Error.\n' + error.message);
+      document.getElementById('i'+eventId).checked = false;
+    });
+  }
+</script>
+</body>
+</html>

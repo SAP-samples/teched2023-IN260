@@ -1,0 +1,23 @@
+---
+spring:
+  web.resources.static-locations: "file:./frontend"
+cds:
+  remote.services:
+    - name: "Goal"
+      destination:
+        name: "SFSF-BASIC-ADMIN"
+        type: "odata-v2"
+        service: "/odata/v2"
+# ---
+# spring:
+#   config.activate.on-profile: local
+logging:
+  level:
+    # org.springframework: DEBUG
+    # org.springframework.security: DEBUG
+    com.sap.cloud.sdk: DEBUG
+    com.sap.cds: DEBUG
+    org.apache.http.wire: DEBUG
+    org.apache.hc.client5.http.wire: DEBUG
+    org.apache.http.headers: ERROR
+    org.apache.hc.client5.http.headers: ERROR

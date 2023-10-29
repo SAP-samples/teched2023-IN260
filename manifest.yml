@@ -1,0 +1,16 @@
+---
+applications:
+- name: backend
+  routes:
+    - route: in260-backend.cfapps.eu10-004.hana.ondemand.com
+  path: srv/target/in260-exec.jar
+  memory: 1G
+  disk_quota: 512M
+  env:
+    SPRING_PROFILES_ACTIVE: cloud
+    JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jre.SAPMachineJRE']"
+    JBP_CONFIG_SAP_MACHINE_JRE: '{ use_offline_repository: false, version: 17.+ }'
+  buildpack: sap_java_buildpack
+  services:
+    - in260-dest
+    - xsuaa
