@@ -66,7 +66,7 @@ We will use `CF CLI` to deploy the application.
    ```
    where `API-URL` is the API endpoint of your BTP Trial account, you can see it in the Overview page and `USERNAME` and `PASSWORD` are the credentials you use to log in to your BTP Trial account cockpit.
 
-- [ ] Navigate to the project's [root folder](../../) (`teched2023-AD266`)
+- [ ] Navigate to the project's [root folder](../../) (`teched2023-IN260`)
    1. Run `mvn package` from the root folder to build your project.
    2. Once, the build finishes successfully, run `cf push` to deploy the application to your BTP Trial account.
    3. The url of the deployed application will be displayed in your terminal under `routes` section.
@@ -77,10 +77,10 @@ We will use `CF CLI` to deploy the application.
 
 You can test the application out now by clicking on the buttons available.
 
-- [ ] To see the goals created in SuccessFactors, log in to [SuccessFactors](https://pmsalesdemo8.successfactors.com/) with USER and PASSWORD provided and check if the goal with your chosen <DEMO_ID> (defined in [`Helper`](../../srv/src/main/java/com/sap/cloud/sdk/demo/ad266/utility/Helper.java)) and sub-goal have been created for the user.
+- [ ] To see the goals created in SuccessFactors, log in to [SuccessFactors](https://pmsalesdemo8.successfactors.com/) with USER and PASSWORD provided and check if the goal with your chosen <DEMO_ID> (defined in [`Helper`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/utility/Helper.java)) and sub-goal have been created for the user.
 
 ## Summary
 
 You've now successfully deployed your application to BTP CF and tested it.
 
-Continue to - [Share your feedback](https://github.com/SAP-samples/teched2023-AD266/issues/new/choose)
+Continue to - [Share your feedback](https://github.com/SAP-samples/teched2023-IN260/issues/new/choose)

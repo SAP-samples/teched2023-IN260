@@ -1,10 +1,10 @@
 # Exercise 3 - Consuming the Registration API using the SAP Cloud SDK
 
-The [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/ad266/SignupHandler.java) is the entry point of the application. And `signUp` is the action that will be called when a user signs up for an event or a session.
+The [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java) is the entry point of the application. And `signUp` is the action that will be called when a user signs up for an event or a session.
 The first step to take when a user signs up for an event is to register them for the event.
 As discussed in the previous exercise, for registering the user for an event/session, we will use a synthetic remote OpenAPI service.
 
-In this exercise, we will look at adapting the [`RegistrationServiceHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/ad266/remote/RegistrationServiceHandler.java) to handle all communication with the remote OpenAPI service.
+In this exercise, we will look at adapting the [`RegistrationServiceHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/remote/RegistrationServiceHandler.java) to handle all communication with the remote OpenAPI service.
 and take care of registering the user. We would be interacting with a synthetic OpenAPI service to achieve this.
 
 Let's learn how you can leverage the SAP Cloud SDK to consume a remote OpenAPI service.

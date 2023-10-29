@@ -44,7 +44,7 @@ The interesting part here is the `generate` goal which is responsible for scanni
 
 You can see artifacts being generated for the services we defined in the `service.cds` under the `srv/src/gen/java/cds.gen` folder.
 
->**Note:** If your project does not compile successfully yet, please also additionally assign a value for `DEMO_ID` in the [Helper.java](../../srv/src/main/java/com/sap/cloud/sdk/demo/ad266/utility/Helper.java):
+>**Note:** If your project does not compile successfully yet, please also additionally assign a value for `DEMO_ID` in the [Helper.java](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/utility/Helper.java):
 >   ```java
 >   private static final String DEMO_ID = "ID"+"<add your desk number here>";
 >   ```
@@ -54,7 +54,7 @@ You can see artifacts being generated for the services we defined in the `servic
 
 In a previous section, we learned that `Service`s dispatch events to `Event Handlers`.
 Event handlers are the ones that then implement the behaviour of the service.
-Let's examine the event handler for the `SignupService` in the file [SignupHandler.java](../../srv/src/main/java/com/sap/cloud/sdk/demo/ad266/SignupHandler.java).
+Let's examine the event handler for the `SignupService` in the file [SignupHandler.java](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
 
 - The `@ServiceName(SignupService_.CDS_NAME)` annotation at the top of the class specifies the service which the event handler is registered on. 
 
@@ -76,7 +76,7 @@ Let's try running our application now.
 Examine the logs of the application, you should see something like this:
 ```json
 INFO 57513 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-INFO 57513 --- [  restartedMain] c.sap.cloud.sdk.demo.ad266.Application   : Started Application in 2.348 seconds (process running for 2.759)
+INFO 57513 --- [  restartedMain] c.sap.cloud.sdk.demo.in260.Application   : Started Application in 2.348 seconds (process running for 2.759)
 ```
 
 - [ ] You can now access the application endpoints `http://localhost:8080/odata/v4/SignupService/$metadata` and `http://localhost:8080/odata/v4/GoalService/$metadata` and see the metadata of the services.

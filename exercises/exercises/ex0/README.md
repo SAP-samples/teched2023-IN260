@@ -4,7 +4,7 @@ Before getting started with the exercise, let's check if you have all the prereq
 
 ## Prerequisites
 
-- Please open an IDE of your choice and clone [this repository](https://github.com/SAP-samples/teched2023-AD266) to your local machine and checkout to `initial-state` branch. We recommend using IntelliJ IDEA.
+- Please open an IDE of your choice and clone [this repository](https://github.com/SAP-samples/teched2023-IN260) to your local machine and checkout to `initial-state` branch. We recommend using IntelliJ IDEA.
    <details> 
    <summary>The necessary software for following the exercises is already installed in your systems.</summary>
    If you want you could confirm the installations by running the following commands in your terminal:

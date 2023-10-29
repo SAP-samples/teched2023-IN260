@@ -29,7 +29,7 @@ Visit SAP Business Accelerator Hub to fetch the [SuccessFactors Goal Plan](https
    This dependency is required to enable the [CAP Remote Services Feature](https://cap.cloud.sap/docs/java/remote-services#enabling-remote-services).
    This feature allows you to directly consume remote service APIs via CQN queries in a CAP application.
 
-- [ ] From your project's [root folder](../../) (this is not the `srv` folder, it is `teched2023-AD266` folder), run the `cds import` with the path to the downloaded service definition file as a parameter. 
+- [ ] From your project's [root folder](../../) (this is not the `srv` folder, it is `teched2023-IN260` folder), run the `cds import` with the path to the downloaded service definition file as a parameter. 
    
    ```bash
    cds import /path-to-edmx-file/Goal.edmx --as cds
