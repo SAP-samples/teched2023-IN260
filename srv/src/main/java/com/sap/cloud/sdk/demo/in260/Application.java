@@ -1,4 +1,4 @@
-package com.sap.cloud.sdk.demo.in260.remote;
+package com.sap.cloud.sdk.demo.in260;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

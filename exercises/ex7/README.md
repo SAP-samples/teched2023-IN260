@@ -1,8 +1,8 @@
-# Exercise 5 - (Optional) Deploying the application to SAP Business Technology Platform
+# Exercise 7 - (Optional) Deploying the application to SAP Business Technology Platform
 
 In this exercise, we will look at the steps required to deploy the application to SAP Business Technology Platform.
 
-## 5.1 Creating a destination for SuccessFactors API endpoint and the Synthetic OpenAPI service
+## 7.1 Creating a destination for SuccessFactors API endpoint and the Synthetic OpenAPI service
 
 - [ ] Please follow [this](https://developers.sap.com/tutorials/cp-cf-create-destination.html) tutorial to create a destination in your BTP Trial account cockpit with the following details:
 
@@ -17,7 +17,7 @@ In this exercise, we will look at the steps required to deploy the application t
    ```
 
    The resulting destination should look like this:
-   ![](images/05_01.png)
+   ![](images/07_01.png)
 
 - [ ] Also, create a destination for the `Registration-Service` service with the following details:
 
@@ -29,22 +29,22 @@ In this exercise, we will look at the steps required to deploy the application t
    Authentication: NoAuthentication
    ```
 
-## 5.2 Creating a destination service instance
+## 7.2 Creating a destination service instance
 
 Navigate to the `Service Marketplace` in your BTP Trial account cockpit and find the `Destination` service and click on it.
 
-   ![](images/05_02.png)
+   ![](images/07_02.png)
 
 - [ ] Click on `Create` to create a new instance of the service. Enter an `Instance Name` of your choice, everything else can be left as default. Click on `Create` to create the instance.
 
-   ![img.png](images/05_03.png)
+   ![img.png](images/07_03.png)
 
 The created instance will be listed in the `Instances and Subscriptions` tab.
 
-  ![img.png](images/05_04.png)
+  ![img.png](images/07_04.png)
 
 
-## 5.3 Adjusting the deployment descriptor - manifest.yml
+## 7.3 Adjusting the deployment descriptor - manifest.yml
 
 - [ ] Open the [`manifest.yml`](../../manifest.yml) file and edit the following lines and save the changes:
 
@@ -55,7 +55,7 @@ The created instance will be listed in the `Instances and Subscriptions` tab.
    +    - <your-destination-service-instance-name>
    ```
 
-## 5.4 Deploy the application and Test
+## 7.4 Deploy the application and Test
 
 We will use `CF CLI` to deploy the application.
 
@@ -73,7 +73,7 @@ We will use `CF CLI` to deploy the application.
 
 - [ ] Once the application is deployed successfully, you can test the application by navigating to the <your-application-url> in your browser.
    You should see a screen like this:
-   ![img.png](images/05_05.png)   
+   ![img.png](images/07_05.png)   
 
 You can test the application out now by clicking on the buttons available.
 

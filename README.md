@@ -65,12 +65,12 @@ The requirements to follow the exercises in this repository are:
   - [Exercise 4.5 - Add functionality to SignupHandler](exercises/ex4#45---add-functionality-to-signuphandler)
   - [Exercise 4.6 - Run your application locally](exercises/ex4#46---run-your-application-locally)
   - [Exercise 4.7 - Testing SignupHandler](exercises/ex4#47---testing-signuphandler)
-- [Exercise 5 - (Optional) Deploying the application to SAP Business Technology Platform](exercises/ex5/)
-  - [Exercise 5.1 - Creating a destination for SuccessFactors API endpoint](exercises/ex5#51-creating-a-destination-for-successfactors-api-endpoint)
-  - [Exercise 5.2 - Creating a destination service instance](exercises/ex5#52-creating-a-destination-service-instance)
-  - [Exercise 5.3 Adjusting the deployment descriptor - manifest.yml](exercises/ex5#53-adjusting-the-deployment-descriptor---manifestyml)
-  - [Exercise 5.4 Deploy the application and Testing](exercises/ex5#54-deploy-the-application-and-testing)
-- [Share your feedback](https://github.com/SAP-samples/teched2023-AD266/issues/new/choose)
+- [Exercise 7 - (Optional) Deploying the application to SAP Business Technology Platform](exercises/ex7/)
+  - [Exercise 7.1 - Creating a destination for SuccessFactors API endpoint](exercises/ex7#71-creating-a-destination-for-successfactors-api-endpoint)
+  - [Exercise 7.2 - Creating a destination service instance](exercises/ex7#72-creating-a-destination-service-instance)
+  - [Exercise 7.3 Adjusting the deployment descriptor - manifest.yml](exercises/ex7#73-adjusting-the-deployment-descriptor---manifestyml)
+  - [Exercise 7.4 Deploy the application and Testing](exercises/ex7#74-deploy-the-application-and-testing)
+- [Share your feedback](https://github.com/SAP-samples/teched2023-IN260/issues/new/choose)
 
 ## Useful Links
 - [SAP Customer Influence](https://influence.sap.com/sap/ino/#/campaign/1175) for SAP S/4HANA Cloud APIs.
