@@ -112,11 +112,16 @@
 
   // Function to register for an event
   function registerForEvent(eventId, eventName) {
+    console.log('Registering for event ' + sessionId);
+    if( !sessionId.startsWith('1')) {
+      alert('Sorry, you can only register for TechEd at this time.');
+      return;
+    }
     const delay = document.getElementById('delay').value;
     const fault = document.getElementById('fault').value;
     fetch("/odata/v4/SignupService/signUp", {
       method: "POST",
-      body: JSON.stringify({ session: eventName }),
+      body: JSON.stringify({ session: sessionTitle }),
       headers: { "Content-type": "application/json; charset=UTF-8", delay: delay, fault: fault }
     })
     .then((response) => response.json())
@@ -124,12 +129,12 @@
       if(response.error) {
         throw new Error("Unable to register for session: " + response.error.message);
       }
-      document.getElementById('i'+eventId).disabled = true;
+      document.getElementById('i'+sessionId).disabled = true;
       return response.value;
     })
     .catch((error) => {
       alert('Error.\n' + error.message);
-      document.getElementById('i'+eventId).checked = false;
+      document.getElementById('i'+sessionId).checked = false;
     });
   }
 </script>

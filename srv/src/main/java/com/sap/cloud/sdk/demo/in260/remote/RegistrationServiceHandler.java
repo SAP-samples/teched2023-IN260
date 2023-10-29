@@ -28,7 +28,7 @@ public class RegistrationServiceHandler {
         var event = getTechEdEvent();
 
         var api = new EventRegistrationApi(getDestination());
-        var session = api.getSessions(3)
+        var session = api.getSessions(event.getId())
                 .stream()
                 .filter(s -> s.getTitle().equalsIgnoreCase(sessionName))
                 .findFirst()
