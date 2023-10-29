@@ -24,9 +24,9 @@ public class RegistrationServiceHandler {
         return DestinationAccessor.getDestination("Registration-Service");
     }
 
-    private final ResilienceConfiguration.CacheConfiguration cacheConfiguration = ResilienceConfiguration.CacheConfiguration
+    private static final ResilienceConfiguration.CacheConfiguration cacheConfiguration = ResilienceConfiguration.CacheConfiguration
             .of(Duration.ofDays(1)).withoutParameters();
-    private ResilienceConfiguration resilienceConfiguration = ResilienceConfiguration.empty("caching-config")
+    private static ResilienceConfiguration resilienceConfiguration = ResilienceConfiguration.empty("caching-config")
             .cacheConfiguration(cacheConfiguration);
 
     public void signUpForTechEd() {

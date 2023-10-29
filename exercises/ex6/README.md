@@ -37,18 +37,21 @@ It allows you to configure three things:
 - Expiration Strategy (Optional): The strategy to be used for invalidating the cache entry. 
 - Parameters (Optional): Additional parameters added to the cache key.
 
-- [ ]  Create a `CacheConfiguration` without any parameters and an expiration duration of one day
-- [ ]  Create a `ResilienceConfiguration` with the cache configuration created in the previous step and add them both in the [`RegistrationServiceHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/remote/RegistrationServiceHandler.java) class.
+- [ ]  Create a static `CacheConfiguration` without any parameters and an expiration duration of one day
+- [ ]  Create a static `ResilienceConfiguration` with the cache configuration created in the previous step and add them both in the [`RegistrationServiceHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/remote/RegistrationServiceHandler.java) class.
 
 <details> <summary>Click here to view the solution.</summary>
 
   ```java
-  private final ResilienceConfiguration.CacheConfiguration cacheConfiguration = ResilienceConfiguration.CacheConfiguration
+  private static final ResilienceConfiguration.CacheConfiguration cacheConfiguration = ResilienceConfiguration.CacheConfiguration
           .of(Duration.ofDays(1)).withoutParameters();
-  private ResilienceConfiguration resilienceConfiguration = ResilienceConfiguration.empty("caching-config")
+  private static final ResilienceConfiguration resilienceConfiguration = ResilienceConfiguration.empty("caching-config")
           .cacheConfiguration(cacheConfiguration);
    ```
 </details>
+
+> **Tip:** The cache functionality is tenant aware by default. That means that by default cache entries created under a specific tenant will not be shared with other tenants.
+> Even if no parameters are provided for the cache key, the tenant, if available, will be used as a parameter for the cache key.
 
 Let's now apply the resilience configuration inside the `getTechEdEvent()` method.
 
