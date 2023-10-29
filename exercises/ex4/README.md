@@ -260,7 +260,7 @@ We use an insert statement on the `GoalTask101` entity to create a new task.
 
 You've now successfully used CAP Remote services to consume SuccessFactors Goal service.
 
-Below are a few further, optional exercises to learn more. Continue with those or head to the next step: [Exercise 5 - Deploying the Application to SAP Business Technology Platform](../ex5/README.md)
+Below are a few further, optional exercises to learn more. Continue with those or head to the next step: [Exercise 5 - Use SAP Cloud SDK to make your application resilient](../ex5/README.md)
 
 ## 4.4 (Optional) Add a Custom HTTP Header to Requests
 
