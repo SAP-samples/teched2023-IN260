@@ -42,12 +42,12 @@ It allows you to configure three things:
 
 <details> <summary>Click here to view the solution.</summary>
 
-```java
-    private final ResilienceConfiguration.CacheConfiguration cacheConfiguration = ResilienceConfiguration.CacheConfiguration
-        .of(Duration.ofDays(1)).withoutParameters();
-private ResilienceConfiguration resilienceConfiguration = ResilienceConfiguration.empty("caching-config")
-        .cacheConfiguration(cacheConfiguration);
- ```
+  ```java
+  private final ResilienceConfiguration.CacheConfiguration cacheConfiguration = ResilienceConfiguration.CacheConfiguration
+          .of(Duration.ofDays(1)).withoutParameters();
+  private ResilienceConfiguration resilienceConfiguration = ResilienceConfiguration.empty("caching-config")
+          .cacheConfiguration(cacheConfiguration);
+   ```
 </details>
 
 Let's now apply the resilience configuration inside the `getTechEdEvent()` method.
@@ -62,7 +62,7 @@ The `ResilienceDecorator` API allows you to apply the resilience configuration t
 
 ```java
     @GetMapping( path = "/rest/v1/getTechEdEvent", produces = "application/json")
-public Event getTechEdEvent() {
+    public Event getTechEdEvent() {
         var api = new EventRegistrationApi(getDestination());
 
         List<Event> events = ResilienceDecorator.executeSupplier(() -> api.getEvents(), resilienceConfiguration);
@@ -73,7 +73,7 @@ public Event getTechEdEvent() {
         .findFirst()
         .orElseThrow();
 
-        }
+    }
  ```
 </details>
 
@@ -89,13 +89,13 @@ You can use the JCache API to access the created cache and examine its contents.
 <details> <summary>Click here to view the solution.</summary>
 
 ```java
-        //Place the code inside getTechEdEvent() method
-        final Cache<Object, Object> cache = Caching.getCachingProvider().getCacheManager().getCache("caching-config");
-        if (cache != null) {
-            for (Cache.Entry<Object, Object> entry : cache) {
-                log.info("The cached is " + entry.getKey() + ":" + entry.getValue());
-            }
-        }
+  //Place the code inside getTechEdEvent() method
+  final Cache<Object, Object> cache = Caching.getCachingProvider().getCacheManager().getCache("caching-config");
+  if (cache != null) {
+      for (Cache.Entry<Object, Object> entry : cache) {
+                  log.info("The cached is " + entry.getKey() + ":" + entry.getValue());
+      }
+  }
  ```
 </details>
 
