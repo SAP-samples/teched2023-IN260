@@ -50,8 +50,8 @@ It allows you to configure three things:
    ```
 </details>
 
-> **Tip:** The cache functionality is tenant aware by default. That means that by default cache entries created under a specific tenant will not be shared with other tenants.
-> Even if no parameters are provided for the cache key, the tenant, if available, will be used as a parameter for the cache key.
+> **Tip:** The cache functionality is tenant and user aware by default.
+> Even if no parameters are provided for the cache key, the tenant and principal, if available, will be used as a parameter for the cache key.
 
 Let's now apply the resilience configuration inside the `getTechEdEvent()` method.
 
