@@ -29,7 +29,7 @@ In order to protect yourself from this, you can use the resilience patterns prov
 
 ## 2.1 - Add the Required Dependencies to Your Project
 
-- [ ] In your project's application [`pom.xml`](../../srv/pom.xml) file add the following dependencies to the dependencies section:
+- [ ] 🔨 **In your project's application [`pom.xml`](../../srv/pom.xml) file add the following dependencies to the dependencies section**:
     ```xml
      <!-- SAP Cloud SDK Resilience -->
      <dependency>
@@ -50,13 +50,13 @@ To improve user experience in the web application, it would be worthwhile to int
 
 //TODO add disclaimer that this is a temporary workaround <-- (change for visibility only)
 
-- [ ] Extend the `main` method in [`Application`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class by:
+- [ ] 🔨 **Extend the `main` method in [`Application`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class by**:
    ```diff
    + ResilienceDecorator.setDecorationStrategy(new Resilience4jDecorationStrategy());
    ```
    This will activate the correct resilience decorator for the whole application.
 
-- [ ] Create a `ResilienceConfiguration` configured with a `TimeLimiterConfiguration` with a timeout of 2 seconds in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java) class in your application.
+- [ ] 🔨 **Create a `ResilienceConfiguration` configured with a `TimeLimiterConfiguration` with a timeout of 2 seconds in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java) class in your application.**
    Declare a static field on the class to hold the resilience configuration:
    ```java
    private static final ResilienceConfiguration RESILIENCE_CONFIG = ResilienceConfiguration.of("get-goals")
@@ -67,7 +67,7 @@ To improve user experience in the web application, it would be worthwhile to int
    By default, the resilience properties are applied with tenant and principal isolation activated.
    The configuration above is named "get-goals" and will limit the execution of the decorated operation to 2 seconds.
 
-- [ ] Improve the `updateSFSF` method:
+- [ ] 🔨 **Improve the `updateSFSF` method**:
    ```diff
      var goal =
    -   goalService.getLearningGoal();
@@ -95,7 +95,7 @@ Please feel free to play around with the delay and resilience timeout configurat
 
 ## 2.4 - Use the Retry Pattern
 
-- [ ] Extend the `RESILIENCE_CONFIG` declaration to add retry configuration in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
+- [ ] 🔨 **Extend the `RESILIENCE_CONFIG` declaration to add retry configuration in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java)**.
    ```diff
      private static final ResilienceConfiguration RESILIENCE_CONFIG = ResilienceConfiguration.of("get-goals")
          .timeLimiterConfiguration(ResilienceConfiguration.TimeLimiterConfiguration.of(Duration.ofSeconds(2)))
@@ -122,7 +122,7 @@ In production, you will need to make a reasonable decision for these settings, d
 
 // TODO motivation <-- (change for visibility only)
 
-- [ ] Extend the `RESILIENCE_CONFIG` declaration to add a rate limiter configuration in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
+- [ ] 🔨 **Extend the `RESILIENCE_CONFIG` declaration to add a rate limiter configuration in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java)**.
    ```diff
      private static final ResilienceConfiguration RESILIENCE_CONFIG = ResilienceConfiguration.of("get-goals")
          .timeLimiterConfiguration(ResilienceConfiguration.TimeLimiterConfiguration.of(Duration.ofSeconds(2)))
