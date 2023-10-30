@@ -175,7 +175,7 @@
 				</executions>
 			</plugin>
 
-			<!-- Cloud SDK OpenAPI VDM Generator -->
+			<!-- Cloud SDK OpenAPI Generator -->
 			<plugin>
 				<groupId>com.sap.cloud.sdk.datamodel</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
@@ -199,7 +199,7 @@
 				</executions>
 			</plugin>
 
-			<!-- Cloud SDK OData VDM Generator -->
+			<!-- Cloud SDK OData Generator -->
 			<plugin>
 				<groupId>com.sap.cloud.sdk.datamodel</groupId>
 				<artifactId>odata-generator-maven-plugin</artifactId>

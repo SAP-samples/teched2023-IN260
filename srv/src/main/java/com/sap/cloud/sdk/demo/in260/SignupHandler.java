@@ -5,10 +5,18 @@ import cds.gen.signupservice.SignupService_;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
+import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration;
+import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration.CircuitBreakerConfiguration;
+import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration.RateLimiterConfiguration;
+import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration.RetryConfiguration;
+import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration.TimeLimiterConfiguration;
+import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceDecorator;
 import com.sap.cloud.sdk.demo.in260.remote.GoalServiceHandler;
 import com.sap.cloud.sdk.demo.in260.remote.RegistrationServiceHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.Duration;
 
 @Component
 @ServiceName(SignupService_.CDS_NAME)
@@ -47,7 +55,22 @@ public class SignupHandler implements EventHandler
 
     private void updateSFSF(String session) {
         // create a goal and related tasks in SFSF
-        var goal = goalService.getLearningGoal();
+        var timeout = TimeLimiterConfiguration.of(Duration.ofSeconds(2));
+        var retry = RetryConfiguration.of(3, Duration.ofSeconds(1));
+        var rateLimit = RateLimiterConfiguration.of(
+                Duration.ofSeconds(1),
+                Duration.ofSeconds(30),
+                10);
+        var circuitBreaker = CircuitBreakerConfiguration.of()
+                .failureRateThreshold(50)
+                .waitDuration(Duration.ofSeconds(10));
+        var config = ResilienceConfiguration.of(SignupHandler.class)
+                .timeLimiterConfiguration(timeout)
+                .retryConfiguration(retry)
+                .rateLimiterConfiguration(rateLimit)
+                .circuitBreakerConfiguration(circuitBreaker);
+
+        var goal = ResilienceDecorator.executeSupplier(goalService::getLearningGoal, config);
 
         if ( goal == null ) {
             goal = goalService.createGoal();

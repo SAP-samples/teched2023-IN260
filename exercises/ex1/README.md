@@ -86,6 +86,25 @@ Let's try running our application now.
 
 ## 1.5 Run your application locally
 
+Before we run our application we'll create destinations for the remote services.
+
+- [ ] 🔨 **Create an environment variable in your terminal window named `destinations` as follows:**
+
+  For CMD:
+  ```cmd
+  set destinations=[{name: "SFSF-BASIC-ADMIN", url:"http://localhost:8080", User:""}, {name: "Registration-Service", url: "https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/"}]
+  ```
+  For PowerShell:
+  ```ps
+  $env:destinations='[{name: "SFSF-BASIC-ADMIN", url:"http://localhost:8080", User:""}, {name: "Registration-Service", url: "https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/"}]'
+  ```
+
+> **Note:** In order to test the resilience patterns locally we'll use a locally provided mock server instead of real systems.
+> That way we can artificially inject faults in any form we need to test our resilience patterns.
+> This is why we have the destination `SFSF-BASIC-ADMIN` with url:`http://localhost:8080` as we have a mock server that runs internally inside our application.
+
+Now run the application.
+
 - [ ] 🔨 **From the root directory of your project, in your IDE's terminal, run `mvn spring-boot:run` to start the application locally.**
 
 Examine the logs of the application, you should see something like this:

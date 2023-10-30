@@ -67,6 +67,10 @@ Additionally, it takes care of cleaning up the context before the thread is even
 
 > **Tip:** You can also extend the `ThreadContextExecutors` class to register your own context objects that need to be propagated to new threads. This is documented [here](https://sap.github.io/cloud-sdk/docs/java/features/multi-tenancy/thread-context#passing-on-other-threadlocals).
 
+## 4.4 Using Resilience Patterns with Async Operations
+
+//TODO
+
 ## Summary
 
 You've now successfully learned how to use asynchronous abstractions provided by the SAP Cloud SDK.
