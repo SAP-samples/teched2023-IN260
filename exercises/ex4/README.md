@@ -10,7 +10,7 @@ What is left now is to add the functionality to create a goal and related tasks 
     - Use `sfadmin` as the username.
     - Once logged in click on the `My Goals` tile on the home screen.
 
-Now let's enhance the `GoalServiceHandler` to implement the interactions with the SuccessFactors API.
+Now, let's enhance the `GoalServiceHandler` to implement the interactions with the SuccessFactors API.
 
 ## 4.1 Create a Remote Service Object
 
@@ -28,13 +28,13 @@ Similarly to the OpenAPI consumption discussed in exercise 3 we need to define a
 > 
 > In our case the generated API class for the SuccessFactors service is similar to the generated entity class `cds.gen.goalservice.Goal_` of our `GoalServcie`. So the fully qualified class name is shown here.
 > 
-> If you like feel free to rename the `cds.gen.goalservice.Goal_` entity later as an optional exercise.
+> Feel free to rename the `cds.gen.goalservice.Goal_` entity later as an optional exercise.
 
-## 4.1 - Fetch all learning goals of a user in GoalServiceHandler
+## 4.1 - Fetch all Learning Goals of a User in GoalServiceHandler
 
 First, we'll write a query that fetches all goals of the user. We'll then refine the query to look for the learning goal specifically.
 
-### 4.1.1 Fetch all goals
+### 4.1.1 Fetch all Goals
 
 - [ ] 🔨Extend the `getLearningGoals()` method in `GoalServiceHandler` class as follows:
     ```java
@@ -57,13 +57,13 @@ Take a moment to understand the query we are constructing and running.
 We use the CQL Statement builder for [Select](https://cap.cloud.sap/docs/java/query-api#the-cql-statement-builders) queries.
 
 - A select in CQL translates to a read (i.e. an HTTP GET request) in OData.
-- The `from` clause determines the entity we read from
-- The `where` clause is translated into a `$filter` OData expression
-- The `goalService` represents the remote service we run the OData request against
-- The `run` command performs the OData request
-- Finally, we obtain the parsed response data as `.listOf(Goal101.class)`
+- The `from` clause determines the entity we read from.
+- The `where` clause is translated into a `$filter` OData expression.
+- The `goalService` represents the remote service we run the OData request against.
+- The `run` command performs the OData request.
+- Finally, we obtain the parsed response data as `.listOf(Goal101.class)`.
 
-> **Tip:** We filter by the `userId` here because a user may have access to goals from other users in addition to their own goals. For example if goals are set to be publicly visible or because a user may have a manager role. But for our use case we are only interested about the user's own goals.
+> **Tip:** We filter by the `userId` here because a user may have access to goals from other users in addition to their own goals. For example, if goals are set to be publicly visible or because a user may have a manager role. But for our use case we are only interested about the user's own goals.
 
 Let's test the code to make sure it functions correctly:
 
@@ -75,27 +75,27 @@ You should see an empty list as we haven't created a goal for the user just yet.
 
 - [ ] 🔨Temporarily change the `DEMO_ID` in the `Helper` class to `ID00` and run the application again.
 
-//TODO update this
+//TODO update this <-- (change just for visibility)
 
 ### 4.1.2 Filter for Learning Goals
 
 Now that we have a working query let's refine it to only fetch learning goals.
 
-- [ ] 🔨 **Add a filter condition such that only goals in the `Learning and Growth` category which aren't completed yet and have a name containing `Learn something at TechEd 2023` are returned.**
+- [ ] 🔨 **Add a filter condition such that only goals in the `Learning and Growth` category, which aren't completed yet and have a name containing `Learn something at TechEd 2023` are returned.**
+
+> **Tip:** You can find more information on how to build queries in the [CDS documentation](https://cap.cloud.sap/docs/java/query-api#where-clause).
 
 <details><summary>Click here to view the solution.</summary>
 
 ```java
-var select = Select.from(GOAL101)
-                   .where(g -> g.userId().eq(user)
-                           .and(g.category().eq("Learning and Growth"))
-                           .and(g.name().contains("Learn something at TechEd 2023"))
-                           .and(g.status().ne("Completed")));
+        var select = Select.from(GOAL101)
+        .where(g -> g.userId().eq(user)
+        .and(g.category().eq("Learning and Growth"))
+        .and(g.name().contains("Learn something at TechEd 2023"))
+        .and(g.status().ne("Completed")));
 ```
 
 </details>
-
-> **Tip:** You can find more information on how to build queries in the [CDS documentation](https://cap.cloud.sap/docs/java/query-api#where-clause).
 
 While this should narrow the results down, there is still one category of goals we want to exclude from our search: Archived goals. 
 However, we can't filter for those on the goal objects directly, but instead have to look at one of the navigation properties.
@@ -144,7 +144,7 @@ Now we can update our code to only return visible goals.
 
 ## 4.2 Create a Learning Goal
 
-The first time you try to fetch the goals, you would get an empty list. This is because we haven't created a goal for the user yet. Let's add the functionality to create a goal for the user.
+The first time you try to fetch the goals, you will get an empty list. This is because we haven't created a goal for the user yet. Let's add the functionality to create a goal for the user.
 
 Before we continue though we'll add some configuration to our `Helper` class.
 
@@ -154,7 +154,7 @@ Before we continue though we'll add some configuration to our `Helper` class.
    public static final String DEMO_ID = "ID"+"<add your desk number here>";
    ```
 
-This is necessary because all participants will use the same credentials for the SuccessFactors system and we want to make sure that the goals created by each participant are easily distinguishable.
+This is necessary because all participants will use the same credentials for the SuccessFactors system, and we want to make sure that the goals created by each participant are easily distinguishable.
 
 With this preparation out of the way, let's create a goal for the user.
 
@@ -215,9 +215,7 @@ Now it's time to test our code.
   - Check the application logs to see if the goal was created successfully. 
   - Head to the [SuccessFactors](https://pmsalesdemo8.successfactors.com/) UI to see your created goal. 
 
-// TODO rather test this via UI? Or not test at all yet? we don't want too many goals created in SFSF
-
-
+// TODO rather test this via UI? Or not test at all yet? we don't want too many goals created in SFSF <-- (change just for visibility)
 
 ## 4.3 - Create a Task
 
@@ -226,9 +224,9 @@ We want to add tasks to an already created goal when a user registers for sessio
 Let's add the functionality to create a task for the user.
 
 - [ ] 🔨 **Implement the `void createTask(goal, title)` method to create a task related to the given goal in the remote service.**
-  - Use the `GoalTask_101` entity to create a new task
-  - Make sure to use the `id` of the goal as `objId` property of the task
-  - Chose a number for the `done` percentage property that makes sense to you
+  - Use the `GoalTask_101` entity to create a new task.
+  - Make sure to use the `id` of the goal as `objId` property of the task.
+  - Chose a number for the `done` percentage property that makes sense to you.
   
 <details><summary>Click here to view the solution.</summary>
    
@@ -298,7 +296,7 @@ Because we are not setting any result, the CAP framework will subsequently call 
 - [ ] 🔨 **Move the filtering for the userID out of the `GoalServiceHandler` and add it to this before handler instead.**
 - [ ] 🔨 **Move the filtering for the view permission out of the `GoalServiceHandler` by creating an `@After` implementation in the `GoalServiceFilter` to achieve the same behaviour.**
 
-//TODO add solution, test this
+//TODO add solution, test this <-- (change just for visibility)
 
 > **Tip:** Extracting filtering logic like this may also be helpful if you need to turn it on or off depending on other factors. For example, you could annotate this class to only be loaded for specific Spring profiles.
 > 

@@ -43,9 +43,9 @@ Before getting started with the exercise, let's check if you have all the prereq
 
 - Make sure you have a SAP BTP trial account. If you don't have one, you can create one [here](https://developers.sap.com/tutorials/hcp-create-trial-account.html).
 
-## Understanding the use case
+## Understanding the Use Case
 
-We want to build an application that helps users to sign up for an event and sessions of the event.
+We want to build an application that helps users to sign up for an event (such as TechEd) and sessions (such as this hands-on exercise) of the event.
 
 When the user signs up for an event the following things should happen:
 - The user should get registered for the event. 

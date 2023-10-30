@@ -9,7 +9,7 @@ In the application we built, we register a user for an event or session with the
 The business logic of registering for the session or event is implemented in the [`RegistrationServiceHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/remote/RegistrationServiceHandler.java).
 Let's cache the results of fetching the TechEdEvent from the OpenAPI service. 
 
-## 6.1 - Add the required dependencies to your project
+## 6.1 - Add the Required Dependencies to Your Project
 
 The SAP Cloud SDK relies on the `JCache` Service Provider Interface to create and manage cache instances and so, it is required to provide an implementation of the `JCache` interface for using the SDK's caching abstractions.
 
@@ -27,7 +27,7 @@ We use [`Caffeine`](https://github.com/ben-manes/caffeine) as an implementation 
     ```
 In the next step, we will create a cache configuration that will be used for caching the results of the OpenAPI service.
 
-## 6.2 - Create a cache configuration
+## 6.2 - Create a Cache Configuration
 
 The `CacheConfiguration` API is similar to the resilience patterns API that you learned about in the previous exercise.
 
@@ -37,7 +37,7 @@ It allows you to configure three things:
 - Expiration Strategy (Optional): The strategy to be used for invalidating the cache entry. 
 - Parameters (Optional): Additional parameters added to the cache key.
 
-- [ ]  Create a static `CacheConfiguration` without any parameters and an expiration duration of one day
+- [ ]  Create a static `CacheConfiguration` without any parameters and an expiration duration of one day.
 - [ ]  Create a static `ResilienceConfiguration` with the cache configuration created in the previous step and add them both in the [`RegistrationServiceHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/remote/RegistrationServiceHandler.java) class.
 
 <details> <summary>Click here to view the solution.</summary>
@@ -55,7 +55,7 @@ It allows you to configure three things:
 
 Let's now apply the resilience configuration inside the `getTechEdEvent()` method.
 
-## 6.3 - Apply the cache configuration
+## 6.3 - Apply the Cache Configuration
 
 The `ResilienceDecorator` API allows you to apply the resilience configuration to a method call.
 
@@ -80,7 +80,7 @@ The `ResilienceDecorator` API allows you to apply the resilience configuration t
  ```
 </details>
 
-## 6.4 (Optional) - Access the created cache
+## 6.4 (Optional) - Access the Created Cache
 
 You can use the JCache API to access the created cache and examine its contents. Try logging the contents of the cache to the console.
 
@@ -104,6 +104,6 @@ You can use the JCache API to access the created cache and examine its contents.
 
 ## Summary
 
-You've now successfully learnt how to use caching abstraction provided by the SAP Cloud SDK.
+You've now successfully learned how to use caching abstraction provided by the SAP Cloud SDK.
 
 Continue to - [Exercise 7 - (Optional) Deploying the application to SAP Business Technology Platform](exercises/ex7/) if you are interested in deploying the application to the SAP BTP CF.

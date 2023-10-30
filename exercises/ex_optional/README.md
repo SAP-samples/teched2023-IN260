@@ -2,7 +2,7 @@
 
 One can make an application more resilient by running some tasks asynchronously. This often applies to tasks that don't need to succeed immediately.
 
-In our use case adding the goal or task to SuccessFactors is not a critical operation. We can run it asynchronously and if it fails, we can retry it a few times later.
+In our use case, adding the goal or task to SuccessFactors is not a critical operation. We can run it asynchronously and if it fails, we can retry it a few times later.
 
 ## 1.1 Making the SuccessFactors Update Asynchronous
 
@@ -42,13 +42,13 @@ Now let's see how this becomes a problem.
 
 [ ] 🔨 **Copy the same line into the `updateSFSF` method.** 
 
-When you now try to run this code, you'll see that the `updateSFSF` method fails with a `NullPointerException`.
+When you try to run this code, you'll see that the `updateSFSF` method fails with a `NullPointerException`.
 
 The root cause of this problem is that the `RequestContext` is always bound to the original thread.
 Any new thread we create will not have the context attached. So when we run the `updateSFSF` method in a different thread, the request context is not available anymore.
 
 ⚠️ This is a problem, even if we are not using the `RequestContext` explicitly in our code.
-Various CAP and Cloud SDK features rely on the request context to be correctly set.
+Various CAP and Cloud SDK features rely on the request context to be set correctly.
 
 ## 1.3 How to Fix the Problem
 
@@ -62,7 +62,7 @@ Now, the `updateSFSF` method should run successfully again.
 > **Tip:** You can also easily adjust the `@Async` behaviour to use the `ThreadContextExecutors` class. This is documented [here](https://sap.github.io/cloud-sdk/docs/java/features/multi-tenancy/thread-context#spring-integration).
 
 The `ThreadContextExecutors` is essentially the same as the `Executors` class.
-But in addition to just running the new thread it also propagates the relevant context objects () the new thread.
-And it takes care of cleaning up the context before the thread is eventually recycled for the next async operation.
+But in addition to just running the new thread it also propagates the relevant context objects to the new thread.
+Additionally, it takes care of cleaning up the context before the thread is eventually recycled for the next async operation.
 
 > **Tip:** You can also extend the `ThreadContextExecutors` class to register your own context objects that need to be propagated to new threads. This is documented [here](https://sap.github.io/cloud-sdk/docs/java/features/multi-tenancy/thread-context#passing-on-other-threadlocals).

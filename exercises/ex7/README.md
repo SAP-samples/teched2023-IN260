@@ -1,8 +1,8 @@
-# Exercise 7 - (Optional) Deploying the application to SAP Business Technology Platform
+# Exercise 7 - (Optional) Deploying the Application to SAP Business Technology Platform
 
-In this exercise, we will look at the steps required to deploy the application to SAP Business Technology Platform.
+In this exercise, we will look at the steps required to deploy the application to the SAP Business Technology Platform.
 
-## 7.1 Creating a destination for SuccessFactors API endpoint and the Synthetic OpenAPI service
+## 7.1 Creating a Destination for SuccessFactors API Endpoint and the Synthetic OpenAPI Service
 
 - [ ] Please follow [this](https://developers.sap.com/tutorials/cp-cf-create-destination.html) tutorial to create a destination in your BTP Trial account cockpit with the following details:
 
@@ -29,7 +29,7 @@ In this exercise, we will look at the steps required to deploy the application t
    Authentication: NoAuthentication
    ```
 
-## 7.2 Creating a destination service instance
+## 7.2 Creating a Destination Service Instance
 
 Navigate to the `Service Marketplace` in your BTP Trial account cockpit and find the `Destination` service and click on it.
 
@@ -44,7 +44,7 @@ The created instance will be listed in the `Instances and Subscriptions` tab.
   ![img.png](images/07_04.png)
 
 
-## 7.3 Adjusting the deployment descriptor - manifest.yml
+## 7.3 Adjusting the Deployment Descriptor - manifest.yml
 
 - [ ] Open the [`manifest.yml`](../../manifest.yml) file and edit the following lines and save the changes:
 
@@ -55,9 +55,9 @@ The created instance will be listed in the `Instances and Subscriptions` tab.
    +    - <your-destination-service-instance-name>
    ```
 
-## 7.4 Deploy the application and Test
+## 7.4 Deploy the Application and Test
 
-We will use `CF CLI` to deploy the application.
+We will use the `CF CLI` to deploy the application.
 
 - [ ] Login into your BTP Trial account CF space by using the following command in your IDE's terminal:
 
@@ -68,14 +68,14 @@ We will use `CF CLI` to deploy the application.
 
 - [ ] Navigate to the project's [root folder](../../) (`teched2023-IN260`)
    1. Run `mvn package` from the root folder to build your project.
-   2. Once, the build finishes successfully, run `cf push` to deploy the application to your BTP Trial account.
+   2. Once the build finishes successfully, run `cf push` to deploy the application to your BTP Trial account.
    3. The url of the deployed application will be displayed in your terminal under `routes` section.
 
 - [ ] Once the application is deployed successfully, you can test the application by navigating to the <your-application-url> in your browser.
    You should see a screen like this:
    ![img.png](images/07_05.png)   
 
-You can test the application out now by clicking on the buttons available.
+You can test the application by clicking on the buttons available.
 
 - [ ] To see the goals created in SuccessFactors, log in to [SuccessFactors](https://pmsalesdemo8.successfactors.com/) with USER and PASSWORD provided and check if the goal with your chosen <DEMO_ID> (defined in [`Helper`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/utility/Helper.java)) and sub-goal have been created for the user.
 
