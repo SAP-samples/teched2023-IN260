@@ -10,18 +10,18 @@ This repository contains the material for the SAP TechEd 2023 session IN260 - Re
 
 This session dives into how tools such as SAP Cloud Application Programming Model, SAP Cloud SDK, and others can be used to develop applications that connect to SAP applications of any kind through APIs.
 
-SAP Cloud Application Programming Model or [CAP](https://cap.cloud.sap/docs/) is a framework of languages, libraries, and tools for building enterprise-grade services and applications. 
-It guides developers through proven best practices and accelerates the development process. 
+SAP Cloud Application Programming Model or [CAP](https://cap.cloud.sap/docs/) is a framework of languages, libraries, and tools for building enterprise-grade services and applications.
+It guides developers through proven best practices and accelerates the development process.
 
 [SAP Cloud SDK](https://sap.github.io/cloud-sdk/docs/overview/overview-cloud-sdk) is a set of libraries and tools for developers to build cloud-native applications on the SAP Business Technology Platform (SAP BTP).
 CAP internally uses the SAP Cloud SDK for service consumption.
 
-Over the course of this workshop, you will create an application that consumes both an OpenAPI and an OData service. 
+Over the course of this workshop, you will create an application that consumes both an OpenAPI and an OData service.
 
-For the OData part, you will learn how to fetch data from SAP SuccessFactors [Goal Plan API](https://api.sap.com/api/PerformanceandGoalsPMGM/overview) by using CAP's [Remote Services Feature](https://cap.cloud.sap/docs/java/remote-services#configuring-remote-services).
+For the OData part, you will learn how to fetch data from SAP SuccessFactors [Goal Plan API](https://api.sap.com/api/PerformanceandGoalsPMGM/overview) by using CAP's [Remote Services](https://cap.cloud.sap/docs/java/remote-services#configuring-remote-services).
 You will also add functionality to create goals and sub-goals and delete them by interacting with the SuccessFactors service via the application.
 
-For the OpenAPI part, you will learn how to use the SAP Cloud SDK to conveniently interact with the service in a type-safe manner. 
+For the OpenAPI part, you will learn how to use the SAP Cloud SDK to conveniently interact with the service in a type-safe manner.
 
 You could then follow similar steps to connect to any other SAP application that exposes an API and easily build extensions for them in the cloud.
 
@@ -42,45 +42,33 @@ The requirements to follow the exercises in this repository are:
 
 - [Getting Started](exercises/ex0/)
   - [Prerequisites](exercises/ex0#prerequisites)
-  - [Understanding the use case](exercises/ex0#understanding-the-use-case)
-- [Exercise 1 - Get and Import SuccessFactors Goal Plan Service](exercises/ex1/)
-    - [Exercise 1.1 - Download specification from SAP Business Accelerator Hub](exercises/ex1#11-download-specification-from-sap-business-accelerator-hub)
-    - [Exercise 1.2 - Add the Goal Plan service to your project](exercises/ex1#12-add-the-goal-plan-service-to-your-project)
-    - [Exercise 1.3 - Configure a destination for the remote API](exercises/ex1#13-configure-a-destination-for-the-remote-api)
-- [Exercise 2 - Understand the existing Project setup](exercises/ex2/)
-    - [Exercise 2.1 - Understanding Service Definitions](exercises/ex2#21-understanding-service-definitions)
-    - [Exercise 2.2 - CDS Maven Plugin](exercises/ex2#22-cds-maven-plugin)
-    - [Exercise 2.3 - Understanding Event Handlers](exercises/ex2#23-understanding-event-handlers)
-    - [Exercise 2.4 - Run your application locally](exercises/ex2#24---run-your-application-locally)
-- [Exercise 3 - Consuming the Registration API using the SAP Cloud SDK](exercises/ex3/)
-  - [Exercise 3.1 - Familiarising yourself with the remote OpenAPI Service](exercises/ex3#31---familiarising-yourself-with-the-remote-openapi-service)
-  - [Exercise 3.2 - Add SAP Cloud SDK to your project and generate a typed OpenAPI client](exercises/ex3#32---add-sap-cloud-sdk-to-your-project-and-generate-a-typed-openapi-client)
-  - [Exercise 3.3 - Use typed client to consume remote OpenAPI service](exercises/ex3#33---use-typed-client-to-consume-remote-openapi-service)
-  - [Exercise 3.4 - Completing the Registration Flow](exercises/ex3#34---completing-the-registration-flow)
-- [Exercise 4 - Consuming the SAP SuccessFactors Goal API using the CAP Remote Services Feature](exercises/ex4/)
-  - [Exercise 4.1 - Understanding Goal related Service Definitions](exercises/ex4#41---understanding-goal-related-service-definitions)
-  - [Exercise 4.2 - Fetch all learning goals of a user in GoalServiceHandler](exercises/ex4#42---fetch-all-learning-goals-of-a-user-in-goalservicehandler)
-  - [Exercise 4.3 - Create a learning goal for a user via GoalServiceHandler](exercises/ex4#43---create-a-learning-goal-for-a-user-via-goalservicehandler)
-  - [Exercise 4.4 - Create a sub goal for a user via GoalServiceHandler](exercises/ex4#44---create-a-sub-goal-for-a-user-via-goalservicehandler)
-  - [Exercise 4.5 - Add functionality to SignupHandler](exercises/ex4#45---add-functionality-to-signuphandler)
-  - [Exercise 4.6 - Run your application locally](exercises/ex4#46---run-your-application-locally)
-  - [Exercise 4.7 - Testing SignupHandler](exercises/ex4#47---testing-signuphandler)
-- [Exercise 5 - Use SAP Cloud SDK to make your application resilient](exercises/ex5/)
-  - [Exercise 5.1 - Add the required dependencies to your project](exercises/ex6#61---add-the-required-dependencies-to-your-project)
-  - [Exercise 5.2 - Use the Resilience API](exercises/ex6#42---use-the-resilience-api)
-  - [Exercise 5.3 - Locally Test the Resilience Patterns](exercises/ex6#43---locally-test-the-resilience-patterns)
-  - [Exercise 5.4 - (Optional) Use the Retry Pattern](exercises/ex6#44---use-the-retry-pattern)
-  - [Exercise 5.5 - (Optional) Use the Rate-Limiter Pattern](exercises/ex6#44---use-the-rate-limiter-pattern)
-- [Exercise 6 - Caching with the SAP Cloud SDK](exercises/ex6/)
-  - [Exercise 6.1 - Add the required dependencies to your project](exercises/ex6#61---add-the-required-dependencies-to-your-project)
-  - [Exercise 6.2 - Create a cache configuration](exercises/ex6#42---create-a-cache-configuration)
-  - [Exercise 6.3 - Apply the cache configuration](exercises/ex6#43---apply-the-cache-configuration)
-  - [Exercise 6.4 (Optional) - Access the created cache](exercises/ex6#44---access-the-created-cache)
-- [Exercise 7 - (Optional) Deploying the application to SAP Business Technology Platform](exercises/ex7/)
-  - [Exercise 7.1 - Creating a destination for SuccessFactors API endpoint](exercises/ex7#71-creating-a-destination-for-successfactors-api-endpoint)
-  - [Exercise 7.2 - Creating a destination service instance](exercises/ex7#72-creating-a-destination-service-instance)
-  - [Exercise 7.3 Adjusting the deployment descriptor - manifest.yml](exercises/ex7#73-adjusting-the-deployment-descriptor---manifestyml)
-  - [Exercise 7.4 Deploy the application and Testing](exercises/ex7#74-deploy-the-application-and-testing)
+  - [Understanding the Use Case](exercises/ex0#understanding-the-use-case)
+- [Exercise 1 - Understand the Existing Project Setup](exercises/ex1/)
+  - [Exercise 1.1 - Understanding the Project Structure](exercises/ex1#11-understanding-the-project-structure)
+  - [Exercise 1.2 - Understanding Service Definitions](exercises/ex1#12-understanding-service-definitions)
+  - [Exercise 1.3 - CDS Maven Plugin](exercises/ex1#13-cds-maven-plugin)
+  - [Exercise 1.4 - Understanding EventHandlers](exercises/ex1#14-understanding-eventhandlers)
+  - [Exercise 1.5 - Run your application locally](exercises/ex1#15-run-your-application-locally)
+- [Exercise 2 - Use SAP Cloud SDK to make your Application Resilient](exercises/ex2/)
+  - [Exercise 2.1 - Add the Required Dependencies to Your Project](exercises/ex2#21---add-the-required-dependencies-to-your-project)
+  - [Exercise 2.2 - Use the Resilience API](exercises/ex2#22---use-the-resilience-api)
+  - [Exercise 2.3 - Locally Test the Resilience Patterns](exercises/ex2#23---locally-test-the-resilience-patterns)
+  - [Exercise 2.4 - Use the Retry Pattern](exercises/ex2#24---use-the-retry-pattern)
+  - [Exercise 2.5 - Use the Rate-Limiter Pattern](exercises/ex2#25---use-the-rate-limiter-pattern)
+- [Exercise 3 - Caching with the SAP Cloud SDK](exercises/ex3/)
+  - [Exercise 3.1 - Add the Required Dependencies to Your Project](exercises/ex3#31---add-the-required-dependencies-to-your-project)
+  - [Exercise 3.2 - Create a Cache Configuration](exercises/ex3#32---create-a-cache-configuration)
+  - [Exercise 3.3 - Apply the Cache Configuration](exercises/ex3#33---apply-the-cache-configuration)
+  - [Exercise 3.4 (Optional) - Access the Created Cache](exercises/ex3#34---access-the-created-cache)
+- [Exercise 4 - (Optional) Asynchronous Operations](exercises/ex4/)
+  - [Exercise 4.1 - Making the SuccessFactors Update Asynchronous](exercises/ex4#41-making-the-successfactors-update-asynchronous)
+  - [Exercise 4.2 - The Problem with this Approach](exercises/ex4#42-the-problem-with-this-approach)
+  - [Exercise 4.3 - How to Fix the Problem](exercises/ex4#43-how-to-fix-the-problem)
+- [Exercise 5 (Optional) - Deploying the application to SAP Business Technology Platform](exercises/ex5/)
+  - [Exercise 5.1 - Creating a Destination for SuccessFactors API Endpoint and the Synthetic OpenAPI Service](exercises/ex5#51-creating-a-destination-for-successfactors-api-endpoint-and-the-synthetic-openapi-service)
+  - [Exercise 5.2 - Creating a Destination Service Instance](exercises/ex5#52-creating-a-destination-service-instance)
+  - [Exercise 5.3 Adjusting the Deployment Descriptor - manifest.yml](exercises/ex5#53-adjusting-the-deployment-descriptor---manifestyml)
+  - [Exercise 5.4 Deploy the Application and Test](exercises/ex5#54-deploy-the-application-and-test)
 - [Share your feedback](https://github.com/SAP-samples/teched2023-IN260/issues/new/choose)
 
 ## Useful Links

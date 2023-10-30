@@ -1,96 +1,109 @@
-# Exercise 1 - Get and Import SuccessFactors Goal Plan Service
+# Exercise 1 - Understand the Existing Project Setup
 
-In this exercise, we will get the [SuccessFactors Goal Plan Service API](https://api.sap.com/api/PerformanceandGoalsPMGM/overview) definition and import the service into our project.
+To better understand the initial state of the project and where we want to go, let's examine the current state of the application.
 
-## 1.1 Download Specification from SAP Business Accelerator Hub
+## 1.1 Understanding the Project Structure
 
-Visit the SAP Business Accelerator Hub to fetch the [SuccessFactors Goal Plan](https://api.sap.com/api/PerformanceandGoalsPMGM/overview) API specification. You should see results like below:
+The project structure is as follows:
 
-![](images/01_01.png)
+```txt
+├── srv
+│   ├── external
+│   │   └── ...  // here we will add the metadata files of the remote services
+│   ├── src
+│   │   ├── gen
+│   │   |   └── ...  // generated Java classes will be here
+│   │   ├── main
+│   │   |   |── Application.java
+│   │   |   |── SignupHandler.java  // the main entry point for our business logic
+│   │   |   |── remote
+│   │   |   |   └── GoalServiceHandler.java         // handles all communication to SuccessFactors
+│   │   |   |   └── RegistrationServiceHandler.java // handles all communication to the Registration API
+|   └── service.cds  // here we defined our CDS models and services
+|   └── pom.xml  // all our dependencies and plugins are here
+├── pom.xml // here we manage our dependency versions
+```
 
-- [ ] (are these bullet points intended to be checkboxes?) Scroll down the page to find API specification of the service listed. Download the EDMX file by clicking on the download button. You might have to log in with your trial account credentials.
-![](images/01_02.png)
+There are a few more files present, but the above are mostly what we will be working with during the exercises.
 
-- [ ] For ease of understanding, please rename the downloaded file to `Goal.edmx` and place it in a folder of your choice.
+## 1.2 Understanding Service Definitions
 
-> **Tip:** If you are facing issues with logging in, we have also included the service definition file in the `exercises/resources` folder of this repository([Goal.edmx](../resources/Goal.edmx)) for your convenience.
+Services are one of the core concepts of CAP.
+They are declared in [CDS](https://cap.cloud.sap/docs/about/#service-definitions-in-cds) and dispatch events to `Event Handlers`.
+Let's examine the [`service.cds`](../../srv/service.cds) file, which defines the services exposed by our application: It defines two services, `SignupService` and the `GoalService`.
 
-## 1.2 Add the Goal Plan Service to your Project
+- The `SignupService` is our main entry point to perform our business logic.
+- The `GoalService` is just for testing individual aspects of the application later, it is not required for the main use case.
 
-- [ ] In your application's [`pom.xml`](../../srv/pom.xml) file you can find the following dependency:
-   ```xml
-       <!-- Remote Services -->
-       <dependency>
-           <groupId>com.sap.cds</groupId>
-           <artifactId>cds-feature-remote-odata</artifactId>
-           <scope>runtime</scope>
-       </dependency>
-   ```
-   It is required to enable the [CAP Remote Services Feature](https://cap.cloud.sap/docs/java/remote-services#enabling-remote-services).
-   This feature allows you to directly consume remote service APIs via CQN queries in a CAP application.
+The `SignupService` exposes one action called `signUp`. It takes a `String` session, which is the name of the session a user intends to sign up for.
 
-- [ ] From your project's [root folder](../../) (this is not the `srv` folder, it is `teched2023-IN260` folder), run the `cds import` with the path to the downloaded service definition file as a parameter. 
-   
-   ```bash
-   cds import /path-to-edmx-file/Goal.edmx --as cds
-   ```
-   
-   The output will look like this:
-   ```bash
-   [cds] - imported API to srv/external/Goal
-   > use it in your CDS models through the like of:
-   
-   using { Goal as external } from './external/Goal'
-   
-   [cds] - updated ./package.json
-   ```
-   
-   The command will copy the service definition file to the [`srv/external`]((../../srv/external)) folder of your project and convert it to CAP’s CDS format, which will be placed there as well (`srv/external/Goal.cds`).
-   
-   Additionally, the remote service will be registered as a requirement in the `package.json` file:
-   
-   ```json
-   {
-     "cds": {
-       "requires": {
-         "Goal": {
-           "kind": "odata-v2",
-           "model": "srv/external/Goal"
-         }
-       }
-     }
-   }
-   ```
+```cds
+@path: 'SignupService'
+service SignupService {
+  action signUp(session: String) returns String;
+}
+```
 
-## 1.3 Configure a Destination for the Remote API
+The `@path` argument allows you to provide a custom path for the exposed service.
+In this example, we are providing the value _"SignupService"_, which means that this particular service will be available at `{application-hostname}/odata/v4/SignupService/` once our application runs.
 
-> A **_destination_** is a configuration object that contains all the information (e.g. URL, authorization information, additional headers etc.) required to connect to a remote service.
+Let's understand what artifacts are generated based on the services we defined in the next step. 
 
-Destinations are used to define connections from your application to remote systems, and as we are trying to connect to a remote API, we need to define a destination for it.
+## 1.3 CDS Maven Plugin
 
-- [ ] In your application's [`application.yaml`](../../srv/src/main/resources/application.yaml) add a destination for the imported service under `remote.services`:
+In your application's [pom.xml](../../srv/pom.xml), under the `plugins` section you can see the [`cds-maven-plugin`](https://cap.cloud.sap/docs/java/assets/cds-maven-plugin-site/plugin-info.html) entry.
+The interesting part here is the `generate` goal, which is responsible for scanning project directories for CDS files and generating Java POJOs for type-safe access to the CDS model.
 
-   ```yaml
-   cds:
-     datasource:
-       auto-config.enabled: false
-     remote.services:
-       - name: "Goal"
-         destination:
-           name: "SFSF-BASIC-ADMIN"
-           type: "odata-v2"
-           suffix: "/odata/v2"
-   ``` 
+- [ ] 🔨 **From your project's root directory, run `mvn clean compile`.**
 
-Please note, that the name of the destination given here will be re-used to create the destination in the SAP BTP cockpit eventually.
+You can see artifacts being generated for the services we defined in the `service.cds` under the `srv/src/gen/java/cds.gen` folder.
 
-The `type` property defines the protocol used by the remote API which is an OData v2 service in this case. 
+In order for the IDE to recognise the new directory as source code we need to mark it as such.
 
-The `suffix` property value would be appended to the url obtained from the destination.
+- [ ] 🔨**For the IntelliJ IDE: right-click the directory `srv/src/gen/java` and select `Mark Directory as` -> `Generated Sources Root`.**
+
+> **Tip:** The generated sources are excluded from Git by the current `.gitignore` file.
+> Generally this is typically a matter of preference and may also depend on how you set up the CI/CD of your project.
+
+## 1.4 Understanding EventHandlers
+
+In a previous section, we learned that `Service`s dispatch events to `Event Handlers`.
+Event handlers are the ones that then implement the behaviour of the service.
+Let's examine the event handler for the `SignupService` in the file [SignupHandler.java](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
+
+- The `@ServiceName(SignupService_.CDS_NAME)` annotation at the top of the class specifies the service, which the event handler is registered on. 
+
+- The `@On( event = SignUpContext.CDS_NAME)` annotation on top of the method `signUp(context)` specifies the `Event Phase` at which the method would be called.
+   - An `Event` can be processed in three phases: `Before`, `On`, and `After`. As we are defining the core business logic of the action, we are using the `On` phase.
+   - What this means is that everytime the `signUp(session)` action is called, an event is triggered and the `signUp(context)` method is called.
+
+- `Event Contexts` provide a way to access the parameters and return values. `SignUpContext` is the event context here, which helps us to access the action parameter, additional query parameters, and other information of the incoming request.
+   It would also be eventually used to set the return value of the action.
+
+- Note that some imports used in the class like `SignupService_` and `SignUpContext` were all generated by the CDS Maven Plugin in the previous step.
+
+Let's try running our application now.
+
+## 1.5 Run your application locally
+
+- [ ] 🔨 **From the root directory of your project, in your IDE's terminal, run `mvn spring-boot:run` to start the application locally.**
+
+Examine the logs of the application, you should see something like this:
+```json
+INFO 57513 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+INFO 57513 --- [  restartedMain] c.sap.cloud.sdk.demo.in260.Application   : Started Application in 2.348 seconds (process running for 2.759)
+```
+
+- [ ] 🔨 **You can now access the application endpoints:**
+  - Frontend: http://localhost:8080 
+  - Metadata: http://localhost:8080/odata/v4/SignupService/$metadata
+
+The endpoint for signing up `http://localhost:8080/odata/v4/SignupService/signUp` is also available but will currently not do much as we haven't implemented the business logic yet. 
+
+We will do this in the upcoming exercises. You can stop the application by pressing `Ctrl+C` in the terminal.
 
 ## Summary
 
-You've now successfully added the SuccessFactors Goal Plan Service to your project.
+You've now successfully understood the existing files in your project. Let's now go add some code.
 
-Continue to - [Exercise 2 - Understand the existing Project setup](../ex2/README.md)
-
+Continue to - [Exercise 2 - Use SAP Cloud SDK to make your Application Resilient](../ex2/README.md)

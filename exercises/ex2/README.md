@@ -1,94 +1,158 @@
-# Exercise 2 - Understand the Existing Project Setup
+# Exercise 2 - Use SAP Cloud SDK to make your Application Resilient
 
-Let us first refresh our use case.
+In this exercise, we will learn about the SAP Cloud SDK offering for various resilience patterns to make your application more robust.
 
-We want to build an application that helps users to sign up for an event (such as TechEd) and sessions (such as this hand-on exercise) of the event.
+Applying patterns like the following will help to make your code more resilient against failures it might encounter:
+* Time Limiter
+* Retry
+* Rate Limiter
+* Circuit Breaker
+* Bulkhead
 
-When the user signs up for an event the following things should happen:
-- The user should get registered for the event. 
-- A learning goal should be automatically created for them in SuccessFactors. 
-- Any subsequent sessions that a user signs up for should also be registered and added as sub-goals to the created goal.
+In this exercise, we'll focus on the first two patterns.
 
-Registering a user for an event/session will be done through a synthetic remote OpenAPI service.
-Creating learning goals and sub-goals for them, on the other hand, will be done by consuming the SuccessFactors Goal Plan service.
+### Motivation
 
-Based on the use case we need components to handle signing up, registration, and goal creation.
-Let's look at the existing project structure in this exercise to see what is already there and what needs to be added.
+//TODO update this to better match slides <-- (change for visibility only)
 
-## 2.1 Understanding Service Definitions
+This exercise is about optional code improvements.
+The benefits may not be directly visible, but they are important for a productive application runtime.
+If your application serves multiple tenants or principals, or if it interacts with a multitude of external systems, then it will probably receive unbalanced computational load - depending on the context.
+You will want to avoid the situation where one operation with error-prone context disrupts the session for other customers and users, or worst case - brings the whole application to a halt.
 
-Services are one of the core concepts of CAP.
-They are declared in [CDS](https://cap.cloud.sap/docs/about/#service-definitions-in-cds) and dispatch events to `Event Handlers`.
-Let's examine the [`service.cds`](../../srv/service.cds) file, which defines the services exposed by our application:
+In order to protect yourself from this, you can use the resilience patterns provided by the SAP Cloud SDK.
 
-- It defines two services, `SignupService` and the `GoalService`.
+### Prerequisites
 
-- The `SignupService` is a service that just exposes an action. The action takes a `String` session, which is the name of the session a user intends to sign up for.
+- You can start the application locally with `mvn spring-boot:run` or by running/debugging the `Application` class.
+- You can access the running application frontend at `http://localhost:8080` and it displays a list of sessions.
+
+## 2.1 - Add the Required Dependencies to Your Project
+
+- [ ] In your project's application [`pom.xml`](../../srv/pom.xml) file add the following dependencies to the dependencies section:
+    ```xml
+     <!-- SAP Cloud SDK Resilience -->
+     <dependency>
+         <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
+         <artifactId>resilience</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>com.sap.cloud.sdk.frameworks</groupId>
+         <artifactId>resilience4j</artifactId>
+     </dependency>
+    ```
+   While the first dependency offers the API to interact with the SAP Cloud SDK, the second one actually provides the internal implementation of the resilience patterns.
+
+## 2.2 - Use the Resilience API
+
+Imagine, the interaction with SAP SuccessFactors is not very reliable, maybe it loads too long without any result.
+To improve user experience in the web application, it would be worthwhile to interrupt the lasting request and show a message to the user. 
+
+//TODO add disclaimer that this is a temporary workaround <-- (change for visibility only)
+
+- [ ] Extend the `main` method in [`Application`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class by:
+   ```diff
+   + ResilienceDecorator.setDecorationStrategy(new Resilience4jDecorationStrategy());
    ```
-   @path: 'SignupService'
-   service SignupService {
-      action signUp(session: String) returns String;
-   }
+   This will activate the correct resilience decorator for the whole application.
+
+- [ ] Create a `ResilienceConfiguration` configured with a `TimeLimiterConfiguration` with a timeout of 2 seconds in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java) class in your application.
+   Declare a static field on the class to hold the resilience configuration:
+   ```java
+   private static final ResilienceConfiguration RESILIENCE_CONFIG = ResilienceConfiguration.of("get-goals")
+       .timeLimiterConfiguration(ResilienceConfiguration.TimeLimiterConfiguration.of(Duration.ofSeconds(2)));
    ```
-  The `@path` argument allows you to provide a custom path for the exposed service.
-  In this example, we are providing the value _"SignupService"_, which means that this particular service will be available at `{application-hostname}/odata/v4/SignupService/` once our application runs.
+   For every Resilience API usage, providing an operation identifier is a requirement.
+   The identifier is used to provide a unique context for the resilience patterns.
+   By default, the resilience properties are applied with tenant and principal isolation activated.
+   The configuration above is named "get-goals" and will limit the execution of the decorated operation to 2 seconds.
 
-- The `GoalService` is a service that exposes an entity `Goal`. We will learn more about it in the subsequent exercises.
+- [ ] Improve the `updateSFSF` method:
+   ```diff
+     var goal =
+   -   goalService.getLearningGoal();
+   +   ResilienceDecorator.executeSupplier(() -> goalService.getLearningGoal(), RESILIENCE_CONFIG);
+   ```
+  With the improvement from above, the retrieval of the learning goal from SAP SuccessFactors is limited to 2 seconds. If the operation takes longer, it will be aborted and the user will be notified.
 
-Let's understand what artifacts are generated based on the services we defined in the next step. 
+The resilience configuration allows for more configuration.
+But for now let's focus on the timeout.
 
-## 2.2 CDS Maven Plugin
+## 2.3 - Locally Test the Resilience Patterns
 
-In your application's [pom.xml](../../srv/pom.xml), under the `plugins` section you can see the [`cds-maven-plugin`](https://cap.cloud.sap/docs/java/assets/cds-maven-plugin-site/plugin-info.html) entry.
-The interesting part here is the `generate` goal, which is responsible for scanning project directories for CDS files and generating Java POJOs for type-safe access to the CDS model.
+In order to test the resilience patterns locally, we need to direct our requests from SAP SuccessFactors to a locally provided mock server.
 
-- [ ] From your project's root directory, run `mvn clean compile`.
+- Change the destination url of `SFSF-BASIC-ADMIN` to `http://localhost:8080`.
+- Run the application locally with `mvn spring-boot:run` or by running/debugging the [`Application`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class.
+- Open the application frontend at http://localhost:8080/#resilience.
+   Notice the minor URL change.
+   In addition to the list of sessions, you will see two adjustable input fields for artificial **delay** and **fault rate**.
+- Enter a delay of `3000` and keep the fault rate at `0`.
+- When clicking on one session, you will see the loading indicator for 2 seconds, after which an error message for `TimeoutException` appears.
 
-You can see artifacts being generated for the services we defined in the `service.cds` within the `srv/src/gen/java/cds.gen` folder.
+Congratulations, you have successfully tested the timeout resilience pattern.
+Please feel free to play around with the delay and resilience timeout configuration to see how the application behaves.
 
-> **Note:** If your project does not compile successfully yet, please also additionally assign a value for `DEMO_ID` in the [Helper.java](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/utility/Helper.java):
->   ```java
->   private static final String DEMO_ID = "ID"+"<add your desk number here>";
->   ```
-> We will explain, why this is necessary in a subsequent exercise.
+## 2.4 - Use the Retry Pattern
 
-## 2.3 Understanding EventHandlers
+- [ ] Extend the `RESILIENCE_CONFIG` declaration to add retry configuration in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
+   ```diff
+     private static final ResilienceConfiguration RESILIENCE_CONFIG = ResilienceConfiguration.of("get-goals")
+         .timeLimiterConfiguration(ResilienceConfiguration.TimeLimiterConfiguration.of(Duration.ofSeconds(2)))
+   +     .retryConfiguration(ResilienceConfiguration.RetryConfiguration.of(3, Duration.ofSeconds(1)));
+   ```
+   The configuration above adds a retry mechanism to repeat the operation upon failure. 
+   The number of invocations is limited to 3.
+   Between each invocation, there will be a 1-second delay.
 
-In a previous section, we learned that `Service`s dispatch events to `Event Handlers`.
-Event handlers are the ones that then implement the behaviour of the service.
-Let's examine the event handler for the `SignupService` in the file [SignupHandler.java](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
+That's it, now let's test the retry resilience pattern.
 
-- The `@ServiceName(SignupService_.CDS_NAME)` annotation at the top of the class specifies the service, which the event handler is registered on. 
+- Open the application frontend at http://localhost:8080/#resilience.
+- Enter a failure rate percentage of `100` and keep the delay at `0`. 
+- When clicking on a session, you will receive an error message.
 
-- The `@On( event = SignUpContext.CDS_NAME)` annotation on top of the method `signUp(context)` specifies the `Event Phase` at which the method would be called.
-   An `Event` can be processed in three phases: `Before`, `On`, and `After`. As we are defining the core business logic of the action, we are using the `On` phase.
-   What this means is that everytime the `signUp(session)` action is called, an event is triggered and the `signUp(context)` method is called.
+In the application logs you will notice the additional retries.
+Please feel free to play around with the failure rate, to make the effect more visible.
+If you add delay, you can check which one fails first - the retry or time-limiter.
+In production, you will need to make a reasonable decision for these settings, depending on the target system.
 
-- `Event Contexts` provide a way to access the parameters and return values. `SignUpContext` is the event context here, which helps us to access the action parameter, additional query parameters, and other information of the incoming request.
-   It would also be eventually used to set the return value of the action.
+// TODO add optional section on choosing exceptions to retry <-- (change for visibility only)
 
-- Note that some imports used in the class like `SignupService_` and `SignUpContext` have all benn generated by the CDS Maven Plugin in the previous step.
+## 2.5 - Use the Rate-Limiter Pattern
 
-Let's try running our application now.
+// TODO motivation <-- (change for visibility only)
 
-## 2.4 Run your Application Locally
+- [ ] Extend the `RESILIENCE_CONFIG` declaration to add a rate limiter configuration in [`SignupHandler`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java).
+   ```diff
+     private static final ResilienceConfiguration RESILIENCE_CONFIG = ResilienceConfiguration.of("get-goals")
+         .timeLimiterConfiguration(ResilienceConfiguration.TimeLimiterConfiguration.of(Duration.ofSeconds(2)))
+         .retryConfiguration(ResilienceConfiguration.RetryConfiguration.of(3, Duration.ofSeconds(1)))
+   +     .rateLimiterConfiguration(ResilienceConfiguration.RateLimiterConfiguration.of(Duration.ofSeconds(1), Duration.ofSeconds(2), 10));
+   ```
+   The configuration above adds a rate limiter, to limit the number of times the decorated operation is invoked in a moving time window.
+   The number of invocations is limited to 10.
+   The moving time window has a duration of 30 seconds.
+   The punishment for exceeding the limit is a 1-second delay.
 
-- [ ] From the root directory of your project, in your IDE's terminal, run `mvn clean spring-boot:run` to start the application locally.
+That's it, now let's test the rate limiter resilience pattern.
 
-Examine the logs of the application, you should see something like this:
-```json
-INFO 57513 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-INFO 57513 --- [  restartedMain] c.sap.cloud.sdk.demo.in260.Application   : Started Application in 2.348 seconds (process running for 2.759)
-```
+// TODO formatting <-- (change for visibility only)
 
-- [ ] You can now access the application endpoints http://localhost:8080/odata/v4/SignupService/$metadata and http://localhost:8080/odata/v4/GoalService/$metadata and see the metadata of the services.
+- Open the application frontend at http://localhost:8080/#resilience.
+- Keep failure rate and delay at `0`.
+- Click and register for all sessions, reload the website if necessary.
+   At some point, you will notice a 1s delay.
 
-The endpoints for fetching goals http://localhost:8080/odata/v4/GoalService/Goal and signing up http://localhost:8080/odata/v4/SignupService/signUp are also available, but still won't work as we haven't implemented the business logic yet. 
+Please feel free to play around with the time-limiter and rate-limiter configuration to make this effect more visible.
 
-We will do this in the upcoming exercises. You can stop the application by pressing `Ctrl+C` in the terminal.
+// TODO add section on isolation levels <-- (change for visibility only)
+
+// TODO add optional section on circuit breaker <-- (change for visibility only)
 
 ## Summary
 
-You've now successfully understood the existing files in your project. Let's now go add some code to get the application working.
+You've now successfully learned how to use resilience patterns of the SAP Cloud SDK to improve application robustness.
+There are more patterns available, like the circuit breaker or bulkhead.
+Also caching can be used with the same `Resilience API`, let's have a look at that in the next exercise.
 
-Continue to - [Exercise 3 - Consuming the Registration API using the SAP Cloud SDK](../ex3/README.md)
+Continue to - [Exercise 3 - Caching with the SAP Cloud SDK](../ex3/README.md)
