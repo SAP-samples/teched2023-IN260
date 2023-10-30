@@ -98,9 +98,7 @@ INFO 57513 --- [  restartedMain] c.sap.cloud.sdk.demo.in260.Application   : Star
   - Frontend: http://localhost:8080 
   - Metadata: http://localhost:8080/odata/v4/SignupService/$metadata
 
-The endpoint for signing up `http://localhost:8080/odata/v4/SignupService/signUp` is also available but will currently not do much as we haven't implemented the business logic yet. 
-
-We will do this in the upcoming exercises. You can stop the application by pressing `Ctrl+C` in the terminal.
+You can stop the application by pressing `Ctrl+C` in the terminal.
 
 ## Summary
 

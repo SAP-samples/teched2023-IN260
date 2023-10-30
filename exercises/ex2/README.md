@@ -24,6 +24,19 @@ In order to protect yourself from this, you can use the resilience patterns prov
 
 ### Prerequisites
 
+- [ ] 🔨 **Create an environment variable in your terminal window named `destinations` as follows:**
+
+  For CMD:
+  ```cmd
+  set destinations=[{name: "SFSF-BASIC-ADMIN", url:"http://localhost:8080", User:""}, {name: "Registration-Service", url: "https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/"}]
+  ```
+  For PowerShell:
+  ```ps
+  $env:destinations='[{name: "SFSF-BASIC-ADMIN", url:"http://localhost:8080", User:""}, {name: "Registration-Service", url: "https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/"}]'
+  ```
+> **Note:** In order to test the resilience patterns locally, we need to a locally provided mock server instead of SAP SuccessFactors . 
+> This is why we have the destination `SFSF-BASIC-ADMIN` with url:`http://localhost:8080` as we have a mock server that runs internally inside our application.
+
 - You can start the application locally with `mvn spring-boot:run` or by running/debugging the `Application` class.
 - You can access the running application frontend at `http://localhost:8080` and it displays a list of sessions.
 
@@ -80,9 +93,6 @@ But for now let's focus on the timeout.
 
 ## 2.3 - Locally Test the Resilience Patterns
 
-In order to test the resilience patterns locally, we need to direct our requests from SAP SuccessFactors to a locally provided mock server.
-
-- Change the destination url of `SFSF-BASIC-ADMIN` to `http://localhost:8080`.
 - Run the application locally with `mvn spring-boot:run` or by running/debugging the [`Application`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class.
 - Open the application frontend at http://localhost:8080/#resilience.
    Notice the minor URL change.

@@ -16,14 +16,13 @@ It guides developers through proven best practices and accelerates the developme
 [SAP Cloud SDK](https://sap.github.io/cloud-sdk/docs/overview/overview-cloud-sdk) is a set of libraries and tools for developers to build cloud-native applications on the SAP Business Technology Platform (SAP BTP).
 CAP internally uses the SAP Cloud SDK for service consumption.
 
-Over the course of this workshop, you will create an application that consumes both an OpenAPI and an OData service.
+Over the course of this workshop, you will create an application that consumes both an OpenAPI and an OData service in a resilient manner.
 
-For the OData part, you will learn how to fetch data from SAP SuccessFactors [Goal Plan API](https://api.sap.com/api/PerformanceandGoalsPMGM/overview) by using CAP's [Remote Services](https://cap.cloud.sap/docs/java/remote-services#configuring-remote-services).
-You will also add functionality to create goals and sub-goals and delete them by interacting with the SuccessFactors service via the application.
+For the OData part, you will see how to fetch data from SAP SuccessFactors [Goal Plan API](https://api.sap.com/api/PerformanceandGoalsPMGM/overview) by using CAP's [Remote Services](https://cap.cloud.sap/docs/java/remote-services#configuring-remote-services).
 
-For the OpenAPI part, you will learn how to use the SAP Cloud SDK to conveniently interact with the service in a type-safe manner.
+For the OpenAPI part, you will see how to use the SAP Cloud SDK to conveniently interact with the service in a type-safe manner.
 
-You could then follow similar steps to connect to any other SAP application that exposes an API and easily build extensions for them in the cloud.
+You could then follow similar steps to connect to any other SAP application that exposes an API and easily build extensions for them in the cloud in a resilient manner.
 
 ## Requirements
 
