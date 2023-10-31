@@ -63,11 +63,12 @@ The requirements to follow the exercises in this repository are:
   - [Exercise 4.1 - Making the SuccessFactors Update Asynchronous](exercises/ex4#41-making-the-successfactors-update-asynchronous)
   - [Exercise 4.2 - The Problem with this Approach](exercises/ex4#42-the-problem-with-this-approach)
   - [Exercise 4.3 - How to Fix the Problem](exercises/ex4#43-how-to-fix-the-problem)
-- [Exercise 5 (Optional) - Deploying the application to SAP Business Technology Platform](exercises/ex5/)
-  - [Exercise 5.1 - Creating a Destination for SuccessFactors API Endpoint and the Synthetic OpenAPI Service](exercises/ex5#51-creating-a-destination-for-successfactors-api-endpoint-and-the-synthetic-openapi-service)
-  - [Exercise 5.2 - Creating a Destination Service Instance](exercises/ex5#52-creating-a-destination-service-instance)
-  - [Exercise 5.3 Adjusting the Deployment Descriptor - manifest.yml](exercises/ex5#53-adjusting-the-deployment-descriptor---manifestyml)
-  - [Exercise 5.4 Deploy the Application and Test](exercises/ex5#54-deploy-the-application-and-test)
+- [Exercise 5 - Multi-Tenancy and Isolation](exercises/ex5/README.md)
+- [Exercise 6 (Optional) - Deploying the application to SAP Business Technology Platform](exercises/ex6/README.md)
+  - [Exercise 6.1 - Creating a Destination for SuccessFactors API Endpoint and the Synthetic OpenAPI Service](exercises/ex6#61-creating-a-destination-for-successfactors-api-endpoint-and-the-synthetic-openapi-service)
+  - [Exercise 6.2 - Creating a Destination Service Instance](exercises/ex6#62-creating-a-destination-service-instance)
+  - [Exercise 6.3 Adjusting the Deployment Descriptor - manifest.yml](exercises/ex6#63-adjusting-the-deployment-descriptor---manifestyml)
+  - [Exercise 6.4 Deploy the Application and Test](exercises/ex6#64-deploy-the-application-and-test)
 - [Share your feedback](https://github.com/SAP-samples/teched2023-IN260/issues/new/choose)
 
 ## Useful Links

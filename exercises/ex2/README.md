@@ -152,16 +152,13 @@ var config = ResilienceConfiguration.of(SignupHandler.class)
 ```
 
 > **Tip:** Did you notice what happened to our timeout? It is still working, but it is getting applied per individual retry. Keep this in mind when configuring retries -- you may need to adjust your timeout settings (or apply an additional overall timeout).
-> //TODO verify
 > 
-> This is not the only interaction between different resilience patterns, and you'll learn more about this in exercise 2.6.
-> //TODO
+> This is not the only interaction between different resilience patterns, and you'll learn more about this in [exercise 2.7 ](#27---optional-interactions-between-resilience-patterns).
 
 </details>
 
 > **Tip:** In case you run into an exception regarding a `CircuitBreaker`: You have overdone it with the retries and discovered yet another resilience pattern 😉
-> You can learn more about the circuit breaker in the optional [exercise 2.7](#26) below.
-> //TODO
+> You can learn more about the circuit breaker in the optional [exercise 2.6](#26---optional-the-circuit-breaker-pattern) below.
 
 Now, you might wonder how the retry pattern decides what is a success and what is a failure that needs to be re-run.
 
@@ -229,8 +226,6 @@ var config = ResilienceConfiguration.of(SignupHandler.class)
 
 </details>
 
-// TODO add section on isolation levels <-- (change for visibility only)
-
 ## Summary
 
 You've now successfully learned how to use resilience patterns of the SAP Cloud SDK to improve application robustness.
@@ -279,4 +274,18 @@ This example configures a circuit breaker that will prevent requests for 10 seco
 
 ## 2.7 - (optional) Interactions between Resilience Patterns
 
-// TODO
+In the previous exercises we have already uncovered some of the interactions between the individual resilience patterns.
+Let's explore them a bit further and outline what to pay attention to.
+
+Effectively, the patterns are applied in a certain order that determines which patterns may influence others.
+The ordering is as follows:
+
+> Fallback ( Cache ( Retry ( CircuitBreaker ( RateLimiter ( TimeLimiter ( Bulkhead ( Function ) ) ) ) ) ) )
+
+If you read from left to right it shows you the order in which the aspects will be applied.
+For example, an operation may time out on the first run, be retried one more time and again time out, leading to roughly 2x of the timeout duration in total computation time.
+In general, exceptions are also propagated from right to left´, meaning that for example the circuit breaker may open because the rate limit was exceeded too often.
+
+> **Tip:** While it is possible to adjust the order of execution by providing a custom strategy, the above strategy should serve well for most use cases.
+
+- [ ] 🔨 **If you haven't already, test any of the interactions in your application.**

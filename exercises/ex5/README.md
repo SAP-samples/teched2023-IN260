@@ -1,86 +1,95 @@
-# Exercise 5 (Optional) - Deploying the application to SAP Business Technology Platform
+# Exercise 5 - Multi-Tenancy and Isolation
 
-In this exercise, we will look at the steps required to deploy the application to the SAP Business Technology Platform.
+Now let's explore the case where your application is multi tenant.
 
-## 5.1 Creating a Destination for SuccessFactors API Endpoint and the Synthetic OpenAPI Service
+Some of the resilience patterns become an issue for tenant isolation.
+Specifically, all patterns that hold state across multiple executions need to be tenant-aware.
 
-- [ ] 🔨 **Please follow [this](https://developers.sap.com/tutorials/cp-cf-create-destination.html) tutorial to create a destination in your BTP Trial account cockpit with the following details:**
+Based on what you've learned so far, can you tell which of these patterns may need to be isolated between tenants, assuming your operation performs tenant specific computation?
 
-   ```
-   Name: SFSF-BASIC-ADMIN
-   Type: HTTP
-   Url: https://apisalesdemo8.successfactors.com/
-   Proxy Type: Internet
-   Authentication: BasicAuthentication
-   User: <username-supplied-in-the-session>
-   Password: <password-supplied-in-the-session>
-   ```
+* Time Limiter
+* Retry
+* Rate Limiter
+* Circuit Breaker
+* Bulkhead
+* Caching
 
-   The resulting destination should look like this:
-   ![](images/05_01.png)
+<details><summary>Click here to see if you got it correct.</summary>
 
-- [ ] 🔨 **Also, create a destination for the `Registration-Service` service with the following details:**
+* Caching
+* Rate Limiter
+  * If one tenant performs an excessive amount of operations we should only limit that tenant and not degrade performance for all tenants.  
+* Circuit Breaker
+  * A similar argument can be made  
+* Bulkhead
 
-   ```
-   Name: Registration-Service
-   Type: HTTP
-   Url: https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/
-   Proxy Type: Internet
-   Authentication: NoAuthentication
-   ```
+Caching obviously holds a tenants data, so that one is a must-have.
+The rate limiter should also be applied per tenant.
+If one tenant performs an excessive amount of operations we should only limit that tenant and not degrade performance for all tenants.
+Similar arguments can be made for the circuit breaker and bulkhead.
 
-## 5.2 Creating a Destination Service Instance
+In contrast, a timeout or retry only affects the tenant the operation is currently running for and has no side effects for other tenants.
 
-Navigate to the `Service Marketplace` in your BTP Trial account cockpit and find the `Destination` service and click on it.
+</details>
 
-   ![](images/05_02.png)
+> ℹ️ By default, the SAP Cloud SDK will isolate the relevant patterns based on the current tenant, if it exists.
 
-- [ ] 🔨 **Click on `Create` to create a new instance of the service. Enter an `Instance Name` of your choice, everything else can be left as default. Click on `Create` to create the instance.**
+Let's test this out by artificially setting a tenant to be defined in our context.
 
-   ![img.png](images/05_03.png)
-
-The created instance will be listed in the `Instances and Subscriptions` tab.
-
-  ![img.png](images/05_04.png)
-
-
-## 5.3 Adjusting the Deployment Descriptor - manifest.yml
-
-- [ ] 🔨 **Open the [`manifest.yml`](../../manifest.yml) file and edit the following lines and save the changes:**
-
-   ```diff
-   -#  services:
-   -#    - destination-service
-   +  services:
-   +    - <your-destination-service-instance-name>
+- [ ] 🔨 **Copy the below code into the `SignupHandler` class:**
+  
+   ```java
+   private void run( SignUpContext context, String tenant, Runnable r) {
+       Consumer<RequestContext> c = any -> r.run();
+       context.getCdsRuntime().requestContext().modifyUser(u -> u.setTenant(tenant))
+               .run(c);
+   }
    ```
 
-## 5.4 Deploy the Application and Test
+While this looks a bit complicated it just changes the tenant context for the duration of the operation we want to run.
 
-We will use the `CF CLI` to deploy the application.
+> **Tip:** In a typical application the tenant context is derived from the authorization information of an incoming request.
+> For example a JWT token from an XSUAA or IAS token service. 
 
-- [ ] 🔨 **Login into your BTP Trial account CF space by using the following command in your IDE's terminal:**
+We'll use this helper now to run the same operation with the same resilience config multiple times for different tenants, including not having any tenant defined:
 
-   ```shell
-   cf login -a API-URL -u USERNAME -p PASSWORD
+- [ ] 🔨 **Replace the `updateSFSF(session)` method call as follows:**
+
    ```
-   where `API-URL` is the API endpoint of your BTP Trial account, you can see it in the Overview page and `USERNAME` and `PASSWORD` are the credentials you use to log in to your BTP Trial account cockpit.
+   updateSFSF(session);
+   run(context, "A", () -> updateSFSF(session));
+   run(context, "B", () -> updateSFSF(session));
+   run(context, "C", () -> updateSFSF(session));
+   ```
 
-- [ ] 🔨 **Navigate to the project's [root folder](../../) (`teched2023-IN260`)**
-   1. Run `mvn package` from the root folder to build your project.
-   2. Once the build finishes successfully, run `cf push` to deploy the application to your BTP Trial account.
-   3. The url of the deployed application will be displayed in your terminal under `routes` section.
+- [ ] 🔨 **Disable all resilience patterns except for the rate limiter and set it to allow **_one_** request every 30 seconds.
 
-- [ ] Once the application is deployed successfully, you can test the application by navigating to the <your-application-url> in your browser.
-   You should see a screen like this:
-   ![img.png](images/05_05.png)   
+When testing this now you should see the computation succeed, even though we run 4 times within the 30 second time frame.
+But since we are setting a different tenant for each execution and the isolation is applied per tenant level by default all four calls are permitted.
 
-You can test the application by clicking on the buttons available.
+Of course, it depends on your business logic whether an operation is specific to a tenant (or even a specific user), or if the operation is independent of the current tenant.
+Fortunately, the isolation strategy can be configured.
 
-- [ ] 🔨 **To see the goals created in SuccessFactors, log in to [SuccessFactors](https://pmsalesdemo8.successfactors.com/) with USER and PASSWORD provided and check if the goal with your chosen <DEMO_ID> (defined in [`Helper`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/utility/Helper.java)) and sub-goal have been created for the user.**
+Let's assume we want the rate limit to be applied across all tenants.
+
+- [ ] 🔨 **Change the isolation level to not isolate between tenants and run the code again.** 
+
+<details><summary>Click here to view the solution.</summary>
+
+```java
+var config = ResilienceConfiguration.of(SignupHandler.class)
+                    .isolationMode(ResilienceIsolationMode.NO_ISOLATION)
+```
+
+> **Tip:** The default value is `TENANT_OPTIONAL`. 
+> Among other strategies, you can also enforce that a tenant **must** be present.
+> This can be done via the `TENANT_REQUIRED` option.
+> This would throw an exception in case the current tenant could not be determined.
+
+</details>
 
 ## Summary
 
-You've now successfully deployed your application to BTP CF and tested it.
+You've now learned how the SAP Cloud SDK applies tenant and user isolation and how you can configure the behaviour to your needs.
 
-Continue to - [Share your feedback](https://github.com/SAP-samples/teched2023-IN260/issues/new/choose)
+Continue to - [Exercise 6 (Optional) - Deploying the application to SAP Business Technology Platform](../ex6/README.md) if you are interested in learning how to deploy your application to BTP.
