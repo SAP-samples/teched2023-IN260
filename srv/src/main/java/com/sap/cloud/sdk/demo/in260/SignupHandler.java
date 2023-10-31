@@ -5,18 +5,21 @@ import cds.gen.signupservice.SignupService_;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
+import com.sap.cds.services.request.RequestContext;
 import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration;
 import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration.CircuitBreakerConfiguration;
 import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration.RateLimiterConfiguration;
 import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration.RetryConfiguration;
 import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration.TimeLimiterConfiguration;
 import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceDecorator;
+import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceIsolationMode;
 import com.sap.cloud.sdk.demo.in260.remote.GoalServiceHandler;
 import com.sap.cloud.sdk.demo.in260.remote.RegistrationServiceHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.function.Consumer;
 
 @Component
 @ServiceName(SignupService_.CDS_NAME)
@@ -46,6 +49,12 @@ public class SignupHandler implements EventHandler
                 + "Also, we created an entry in your 'Learning and Growth' section in SAP SuccessFactors to reflect your efforts.");
     }
 
+    private void run( SignUpContext context, String tenant, Runnable r) {
+        Consumer<RequestContext> c = any -> r.run();
+        context.getCdsRuntime().requestContext().modifyUser(u -> u.setTenant(tenant))
+                .run(c);
+    }
+
     private void register(String session) {
         // sign up for the event and the session
         registrationService.signUpForTechEd();
@@ -65,6 +74,7 @@ public class SignupHandler implements EventHandler
                 .failureRateThreshold(50)
                 .waitDuration(Duration.ofSeconds(10));
         var config = ResilienceConfiguration.of(SignupHandler.class)
+                .isolationMode(ResilienceIsolationMode.TENANT_OPTIONAL)
                 .timeLimiterConfiguration(timeout)
                 .retryConfiguration(retry)
                 .rateLimiterConfiguration(rateLimit)
@@ -76,6 +86,6 @@ public class SignupHandler implements EventHandler
             goal = goalService.createGoal();
         }
 
-        goalService.createTask(goal, session);
+        // goalService.createTask(goal, session);
     }
 }
