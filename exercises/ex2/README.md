@@ -57,7 +57,7 @@ In general the API works as follows:
 - Use the `ResilienceConfiguration` class to build a resilience configuration according to your needs.
 - Use the `ResilienceDecorator` class to run any block of code with a given resilience configuration.
 
-We'll first enhance `SignupHandler` ([here](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java)) and apply some resilience patterns to the `updateSFSF` method.
+We'll first enhance the `SignupHandler` ([here](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java)) and apply some resilience patterns to the `updateSFSF` method.
 
 - [ ] 🔨 **Create a `ResilienceConfiguration` with default values and use it with the execution of the `updateSFSF` method.**
 
