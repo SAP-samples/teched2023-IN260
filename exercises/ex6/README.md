@@ -1,4 +1,4 @@
-# Exercise 5 (Optional) - Deploying the application to SAP Business Technology Platform
+# Exercise 6 (Optional) - Deploying the Application to SAP Business Technology Platform
 
 In this exercise, we will look at the steps required to deploy the application to the SAP Business Technology Platform.
 
@@ -46,7 +46,7 @@ The created instance will be listed in the `Instances and Subscriptions` tab.
 
 ## 6.3 Adjusting the Deployment Descriptor - manifest.yml
 
-- [ ] 🔨 **Open the [`manifest.yml`](../../manifest.yml) file and edit the following lines and save the changes:**
+- [ ] 🔨 **Open the [manifest.yml](../../manifest.yml) file and edit the following lines and save the changes:**
 
    ```diff
    -#  services:
@@ -55,7 +55,7 @@ The created instance will be listed in the `Instances and Subscriptions` tab.
    +    - <your-destination-service-instance-name>
    ```
 
-## 6.4 Deploy the Application and Test
+## 6.4 Deploy and Test the Application
 
 We will use the `CF CLI` to deploy the application.
 
@@ -66,18 +66,18 @@ We will use the `CF CLI` to deploy the application.
    ```
    where `API-URL` is the API endpoint of your BTP Trial account, you can see it in the Overview page and `USERNAME` and `PASSWORD` are the credentials you use to log in to your BTP Trial account cockpit.
 
-- [ ] 🔨 **Navigate to the project's [root folder](../../) (`teched2023-IN260`)**
+- [ ] 🔨 **Navigate to the project's [root folder](../..) (`teched2023-IN260`)**
    1. Run `mvn package` from the root folder to build your project.
    2. Once the build finishes successfully, run `cf push` to deploy the application to your BTP Trial account.
    3. The url of the deployed application will be displayed in your terminal under `routes` section.
 
-- [ ] Once the application is deployed successfully, you can test the application by navigating to the <your-application-url> in your browser.
+- [ ] 🔨 **Once the application is deployed successfully, you can test the application by navigating to the <your-application-url> in your browser.**
    You should see a screen like this:
    ![img.png](images/05_05.png)   
 
 You can test the application by clicking on the buttons available.
 
-- [ ] 🔨 **To see the goals created in SuccessFactors, log in to [SuccessFactors](https://pmsalesdemo8.successfactors.com/) with USER and PASSWORD provided and check if the goal with your chosen <DEMO_ID> (defined in [`Helper`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/utility/Helper.java)) and sub-goal have been created for the user.**
+- [ ] 🔨 **To see the goals created in SuccessFactors, log in to [SuccessFactors](https://pmsalesdemo8.successfactors.com/) with USER and PASSWORD provided and check if the goal with your chosen <DEMO_ID> (defined in [Helper](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/utility/Helper.java)) and sub-goal have been created for the user.**
 
 ## Summary
 

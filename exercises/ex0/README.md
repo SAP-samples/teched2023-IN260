@@ -6,9 +6,6 @@ Before getting started with the exercise, let's check if you have all the prereq
 
 - [ ] 🔨 **Clone [this repository](https://github.com/SAP-samples/teched2023-IN260) to your local machine and open in using your preferred IDE.**
   - We recommend using **IntelliJ IDEA** where you can select `File > New... > Project from Existing Sources` and select the cloned repository.
-- [ ] 🔨 **Checkout the `initial-state` branch.**
-  - This branch contains the initial state of the project which we will use as a starting point for the exercises.
-  - The final version of the project is available in the `main` branch.
 - [ ] 🔨 **(Optional) Log into your SAP BTP trial account. If you don't have one, you can create one [here](https://developers.sap.com/tutorials/hcp-create-trial-account.html).**
   - This is only required if you would like to push your application to CloudFoundry.
   - However, all exercises can be completed locally without pushing to CloudFoundry.
