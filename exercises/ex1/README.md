@@ -84,7 +84,7 @@ Let's examine the event handler for the `SignupService` in the file [SignupHandl
 
 Let's try running our application now.
 
-## 1.5 Run your application locally
+## 1.5 Run Your Application Locally
 
 Before we run our application we'll create destinations for the remote services.
 

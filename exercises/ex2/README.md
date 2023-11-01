@@ -1,4 +1,4 @@
-# Exercise 2 - Use SAP Cloud SDK to make your Application Resilient
+# Exercise 2 - Use SAP Cloud SDK to make Your Application Resilient
 
 In this exercise, we will learn about the various resilience patterns the SAP Cloud SDK offers to make your application more robust.
 
@@ -110,7 +110,7 @@ var config = ResilienceConfiguration.of(SignupHandler.class)
 
 Now let's test the timeout actually takes effect if the system does not respond in time.
 
-## 2.3 - Locally Test the Resilience Patterns
+## 2.4 - Locally Test the Resilience Patterns
 
 - [ ] 🔨 **Run the application locally with `mvn spring-boot:run` or by running/debugging the [`Application`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class.**
 - [ ] 🔨 **Open the application frontend at http://localhost:8080/#resilience.**
@@ -130,7 +130,7 @@ Feel free to play around with the delay and resilience timeout configuration to 
 
 > **Tip:** The `TimelimiterConfiguration` has one further option that can be set. Also, internally the timeout requires the operation to run in a separate thread. The thread pool for this can be configured as well. You can learn more about the async execution options in [exercise 4](../ex4/README.md).
 
-## 2.4 - The Retry Pattern
+## 2.5 - The Retry Pattern
 
 Next, we'll look at the retry pattern.
 Retries can be a useful extension to timeouts: If something didn't work, try again later.
@@ -209,7 +209,7 @@ If we perform long-running, unreliable or expensive computations too often we'll
 
 Fortunately, there is a pattern that deals with this aspect as well.
 
-## 2.5 - The Rate-Limiter Pattern
+## 2.6 - The Rate-Limiter Pattern
 
 A rate limit is a restriction on the number of times a certain operation can be performed in a given time window.
 
@@ -238,7 +238,7 @@ You've now successfully learned how to use resilience patterns of the SAP Cloud 
 There are more patterns available, like the circuit breaker or bulkhead.
 You can learn more in the following optional exercises or continue to the next exercise:  [Exercise 3 - Caching with the SAP Cloud SDK](../ex3/README.md)
 
-## 2.6 - (optional) The Circuit Breaker Pattern
+## 2.7 (Optional) - The Circuit Breaker Pattern
 
 A circuit breaker is a pattern that can be used to prevent an application from repeatedly trying to perform an operation that is likely to fail.
 
@@ -278,7 +278,7 @@ This example configures a circuit breaker that will prevent requests for 10 seco
 > However, the opposite is true: An open circuit breaker does not permit further requests.
 > The term comes from electrical engineering where an open circuit is one that does not allow any electrical current to flow.
 
-## 2.7 - (optional) Interactions between Resilience Patterns
+## 2.8 (Optional) - Interactions between Resilience Patterns
 
 In the previous exercises we have already uncovered some of the interactions between the individual resilience patterns.
 Let's explore them a bit further and outline what to pay attention to.

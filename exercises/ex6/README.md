@@ -1,4 +1,4 @@
-# Exercise 5 (Optional) - Deploying the application to SAP Business Technology Platform
+# Exercise 6 (Optional) - Deploying the Application to SAP Business Technology Platform
 
 In this exercise, we will look at the steps required to deploy the application to the SAP Business Technology Platform.
 
@@ -55,7 +55,7 @@ The created instance will be listed in the `Instances and Subscriptions` tab.
    +    - <your-destination-service-instance-name>
    ```
 
-## 6.4 Deploy the Application and Test
+## 6.4 Deploy and Test the Application
 
 We will use the `CF CLI` to deploy the application.
 
