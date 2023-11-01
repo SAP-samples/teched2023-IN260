@@ -7,13 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Duration;
 import java.util.List;
 
 import com.sap.cloud.sdk.cloudplatform.connectivity.Destination;
 import com.sap.cloud.sdk.cloudplatform.connectivity.DestinationAccessor;
-import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceConfiguration;
-import com.sap.cloud.sdk.cloudplatform.resilience.ResilienceDecorator;
 
 @Component
 @RestController
@@ -23,11 +20,6 @@ public class RegistrationServiceHandler {
     private Destination getDestination() {
         return DestinationAccessor.getDestination("Registration-Service");
     }
-
-    private static final ResilienceConfiguration.CacheConfiguration cacheConfiguration = ResilienceConfiguration.CacheConfiguration
-            .of(Duration.ofDays(1)).withoutParameters();
-    private static ResilienceConfiguration resilienceConfiguration = ResilienceConfiguration.empty("caching-config")
-            .cacheConfiguration(cacheConfiguration);
 
     public void signUpForTechEd() {
         var event = getTechEdEvent();
@@ -52,7 +44,7 @@ public class RegistrationServiceHandler {
     public Event getTechEdEvent() {
         var api = new EventRegistrationApi(getDestination());
 
-        List<Event> events = ResilienceDecorator.executeSupplier(() -> api.getEvents(), resilienceConfiguration);
+        List<Event> events = api.getEvents();
 
         return events
                 .stream()

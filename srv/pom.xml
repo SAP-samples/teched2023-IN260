@@ -57,26 +57,6 @@
 			<artifactId>scp-cf</artifactId>
 		</dependency>
 
-
-
-		<!-- Cloud SDK Resilience -->
-		<dependency>
-			<groupId>com.sap.cloud.sdk.cloudplatform</groupId>
-			<artifactId>resilience</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.cloud.sdk.cloudplatform</groupId>
-			<artifactId>resilience4j</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.ben-manes.caffeine</groupId>
-			<artifactId>jcache</artifactId>
-			<version>3.1.8</version>
-			<scope>runtime</scope>
-		</dependency>
-
-
 		<!-- Cloud SDK OpenAPI & Destinations -->
 		<dependency>
 			<groupId>com.sap.cloud.sdk.datamodel</groupId>
@@ -93,6 +73,12 @@
 		<dependency>
 			<groupId>com.sap.cloud.sdk.datamodel</groupId>
 			<artifactId>odata-core</artifactId>
+		</dependency>
+
+		<!-- Temporary workaround for Cloud SDK Preview -->
+		<dependency>
+			<groupId>com.sap.cloud.sdk.cloudplatform</groupId>
+			<artifactId>resilience4j</artifactId>
 		</dependency>
 
 		<dependency>

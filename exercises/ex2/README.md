@@ -36,13 +36,19 @@ But there are two aspects that the SAP Cloud SDK does across all patterns:
          <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
          <artifactId>resilience</artifactId>
      </dependency>
-     <dependency>
+     <!-- <dependency>
          <groupId>com.sap.cloud.sdk.cloudplatform</groupId>
          <artifactId>resilience4j</artifactId>
-     </dependency>
+     </dependency> -->
     ```
 
 While the first dependency offers the API to interact with the SAP Cloud SDK, the second one actually provides the internal implementation of the resilience patterns.
+For this exercise the second one is already present, so you don't need to add it.
+
+> **Tip:** The second dependency is already present here because we are applying a related configuration in the `Application.java`
+class.
+> This config is required for the current preview version of the SAP Cloud SDK.
+> But, once released, the SAP Cloud SDK version 5 will not require this additional code.
 
 ## 2.2 - Use the Resilience API
 
