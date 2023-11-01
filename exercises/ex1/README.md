@@ -98,6 +98,10 @@ Before we run our application we'll create destinations for the remote services.
   ```ps
   $env:destinations='[{name: "SFSF-BASIC-ADMIN", url:"http://localhost:8080", User:""}, {name: "Registration-Service", url: "https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/"}]'
   ```
+  For Git Bash:
+  ```bash
+  export destinations='[{name: "SFSF-BASIC-ADMIN", url:"http://localhost:8080", User:""}, {name: "Registration-Service", url: "https://ad266-registration.cfapps.eu10-004.hana.ondemand.com/"}]'
+  ```
 
 > **Note:** In order to test the resilience patterns locally we'll use a locally provided mock server instead of real systems.
 > That way we can artificially inject faults in any form we need to test our resilience patterns.
