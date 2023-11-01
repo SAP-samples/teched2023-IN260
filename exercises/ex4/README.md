@@ -6,7 +6,7 @@ In our use case, adding the goal or task to SuccessFactors is not a critical ope
 
 ## 4.1 Making the SuccessFactors Update Asynchronous
 
-- [ ] 🔨 **Adjust the `signUp` method in the `SignupHandler` class to run the `updateSFSF` asynchronously in another thread.**
+- [ ] 🔨 **Adjust the `signUp` method in the [SignupHandler](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java) class to run the `updateSFSF` asynchronously in another thread.**
   - Check the application logs to confirm the SuccessFactors update is running after the response is sent to the user. 
 
 <details><summary>Click here to view one possible solution.</summary>
@@ -22,7 +22,7 @@ Executors.newCachedThreadPool()
 > 
 > Alternatively, you can also use Spring's `@Async` annotation on the `updateSFSF`.
 > However, for that you first need to enable async processing.
-> You can find more information on that e.g. in this [tutorial](https://www.baeldung.com/spring-async).
+> You can find more information on that in this [tutorial](https://www.baeldung.com/spring-async).
 
 ## 4.2 The Problem with this Approach
 
@@ -40,7 +40,7 @@ The request context is a thread-local object that holds information such as the 
 
 Now let's see how this becomes a problem.
 
-[ ] 🔨 **Copy the same line into the `updateSFSF` method.** 
+- [ ] 🔨 **Copy the same line into the `updateSFSF` method.** 
 
 When you try to run this code, you'll see that the `updateSFSF` method fails with a `NullPointerException`.
 
@@ -55,23 +55,23 @@ Various CAP and Cloud SDK features rely on the request context to be set correct
 To fix this problem, we need to propagate the request context to the new thread.
 This can be done quite easily using the `ThreadContextExecutors` class of the SAP Cloud SDK.
 
-[ ] 🔨 **Replace `Executors.newCachedThreadPool()` with the `ThreadContextExecutors` class.** 
+- [ ] 🔨 **Replace `Executors.newCachedThreadPool()` with the `ThreadContextExecutors` class.** 
 
 Now, the `updateSFSF` method should run successfully again.
 
-> **Tip:** You can also easily adjust the `@Async` behaviour to use the `ThreadContextExecutors` class. This is documented [here](https://sap.github.io/cloud-sdk/docs/java/features/multi-tenancy/thread-context#spring-integration).
+> **Tip:** You can also easily adjust the `@Async` behaviour to use the `ThreadContextExecutors` class. This is documented [here](https://sap.github.io/cloud-sdk/docs/java/v5/features/multi-tenancy/thread-context#spring-integration).
 
 The `ThreadContextExecutors` is essentially the same as the `Executors` class.
 But in addition to just running the new thread it also propagates the relevant context objects to the new thread.
 Additionally, it takes care of cleaning up the context before the thread is eventually recycled for the next async operation.
 
-> **Tip:** You can also extend the `ThreadContextExecutors` class to register your own context objects that need to be propagated to new threads. This is documented [here](https://sap.github.io/cloud-sdk/docs/java/features/multi-tenancy/thread-context#passing-on-other-threadlocals).
+> **Tip:** You can also extend the `ThreadContextExecutors` class to register your own context objects that need to be propagated to new threads. This is documented [here](https://sap.github.io/cloud-sdk/docs/java/v5/features/multi-tenancy/thread-context#passing-on-other-threadlocals).
 
 ## 4.4 Using Resilience Patterns with Async Operations
 
 For further convenience the `ResilienceDecorator` offers `queueSupplier`.
 This will use a default `ThreadContextExecutor` to run your operation asynchronously and also apply the configured resilience patterns at the same time.
-It returns a `CompletableFuture` which you can use e.g. to register a callback function.
+It returns a `CompletableFuture`, which you can use, for example, to register a callback function.
 
 You can configure the default `ExecutorService` the SAP Cloud SDK uses for the async execution.
 For example, to increase the default thread pool used to 50 use:
@@ -82,7 +82,7 @@ ThreadContextExecutors.setExecutor(DefaultThreadContextExecutorService.of(Execut
 
 ## 4.5 Understanding Multi Tenancy and Isolation Options
 
-In case your application is multi tenant some of the resilience patterns become an issue for tenant isolation.
+In case your application is multi tenant, some of the resilience patterns become an issue for tenant isolation.
 Specifically, all patterns that hold state across multiple executions need to be tenant-aware.
 
 Based on what you've learned so far, can you tell which of these patterns may need to be isolated between tenants, assuming your operation performs tenant specific computation?
@@ -100,7 +100,7 @@ Based on what you've learned so far, can you tell which of these patterns may ne
 * Rate Limiter
   * If one tenant performs an excessive amount of operations we should only limit that tenant and not degrade performance for all tenants.  
 * Circuit Breaker
-  * A similar argument can be made  
+  * A similar argument can be made.
 * Bulkhead
 
 Caching obviously holds a tenants data, so that one is a must-have.
@@ -142,9 +142,9 @@ We'll use this helper now to run the same operation with the same resilience con
    run(context, "C", () -> updateSFSF(session));
    ```
 
-- [ ] 🔨 **Disable all resilience patterns except for the rate limiter and set it to allow **_one_** request every 30 seconds.
+- [ ] 🔨 **Disable all resilience patterns except for the rate limiter and set it to allow _one_ request every 30 seconds.**
 
-When testing this now you should see the computation succeed, even though we run 4 times within the 30 second time frame.
+When testing this now you should see the computation succeed, even though we run 4 times within the 30-second time frame.
 But since we are setting a different tenant for each execution and the isolation is applied per tenant level by default all four calls are permitted.
 
 Of course, it depends on your business logic whether an operation is specific to a tenant (or even a specific user), or if the operation is independent of the current tenant.

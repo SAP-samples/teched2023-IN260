@@ -29,7 +29,7 @@ But there are two aspects that the SAP Cloud SDK does across all patterns:
 
 ## 2.1 - Add the Required Dependencies to Your Project
 
-- [ ] 🔨 **In your project's application [`pom.xml`](../../srv/pom.xml) file add the following dependencies to the dependencies section**:
+- [ ] 🔨 **In your project's application [pom.xml](../../srv/pom.xml) file add the following dependencies to the dependencies section**:
     ```xml
      <!-- SAP Cloud SDK Resilience -->
      <dependency>
@@ -57,7 +57,7 @@ In general the API works as follows:
 - Use the `ResilienceConfiguration` class to build a resilience configuration according to your needs.
 - Use the `ResilienceDecorator` class to run any block of code with a given resilience configuration.
 
-We'll first enhance `SignupHandler` and apply some resilience patterns to the `updateSFSF` method.
+We'll first enhance `SignupHandler` ([here](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/SignupHandler.java)) and apply some resilience patterns to the `updateSFSF` method.
 
 - [ ] 🔨 **Create a `ResilienceConfiguration` with default values and use it with the execution of the `updateSFSF` method.**
 
@@ -72,8 +72,8 @@ var goal = ResilienceDecorator.executeSupplier(goalService::getLearningGoal, con
 - `.of(..)` simply provides a default configuration.
   - Check the Javadoc to see what is configured by default. 
 - The identifier (in this cass the class object) is used to uniquely identify this configuration across different invocations.
-  - This is required to keep any state across multiple executions
-- The `executeSupplier` then takes care of actually running the code
+  - This is required to keep any state across multiple executions.
+- The `executeSupplier` then takes care of actually running the code.
 
 > **Tip:** You can use `.empty(...)` to get a configuration without any defaults.
 > 
@@ -89,7 +89,7 @@ Your application does not have a timeout.
 _Now your application is slow to respond as well._
 
 So a timeout can help preventing faults in one system to propagate to other systems.
-In our case the interaction with SAP SuccessFactors is less important than the actual registration.
+In our case, the interaction with SAP SuccessFactors is less important than the actual registration.
 So we don't want to keep the user waiting too long for a response on the signup request. 
 The default configuration we used above already comes with a timeout of 30 seconds.
 To better demonstrate the effect let's reduce that.
@@ -112,7 +112,7 @@ Now let's test the timeout actually takes effect if the system does not respond 
 
 ## 2.4 - Locally Test the Resilience Patterns
 
-- [ ] 🔨 **Run the application locally with `mvn spring-boot:run` or by running/debugging the [`Application`](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class.**
+- [ ] 🔨 **Run the application locally with `mvn spring-boot:run` or by running/debugging the [Application](../../srv/src/main/java/com/sap/cloud/sdk/demo/in260/Application.java) class.**
 - [ ] 🔨 **Open the application frontend at http://localhost:8080/#resilience.**
 
 Notice the minor URL change.
@@ -139,11 +139,11 @@ Retries are particularly applicable to transient errors, i.e. errors that are no
 
 > **Tip:** Because retries are not always safe to be applied they are disabled by default when using the default configuration.
 
-In our case the request to obtain the learning goal does not modify any state in the SAP SuccessFactors system, so it should be safe to repeat the request in case of a failure.
+In our case, the request to obtain the learning goal does not modify any state in the SAP SuccessFactors system, so it should be safe to repeat the request in case of a failure.
 
 - [ ] 🔨 **Extend the resilience configuration to add a retry behaviour**.
   - Try three total attempts and one second of delay for starters.
-  - Use the webpage to run with `100%` failure rate an no delay.
+  - Use the webpage to run with `100%` failure rate and no delay.
   - Check the application logs to see the retries in action. 
     - (If you like add some logging statements to make it more visible among the other debug logs.)
   - Play around with different values to see how the behaviour changes.
@@ -159,12 +159,12 @@ var config = ResilienceConfiguration.of(SignupHandler.class)
 
 > **Tip:** Did you notice what happened to our timeout? It is still working, but it is getting applied per individual retry. Keep this in mind when configuring retries -- you may need to adjust your timeout settings (or apply an additional overall timeout).
 > 
-> This is not the only interaction between different resilience patterns, and you'll learn more about this in [exercise 2.7 ](#27---optional-interactions-between-resilience-patterns).
+> This is not the only interaction between different resilience patterns, and you'll learn more about this in [exercise 2.8](#28-optional---interactions-between-resilience-patterns).
 
 </details>
 
 > **Tip:** In case you run into an exception regarding a `CircuitBreaker`: You have overdone it with the retries and discovered yet another resilience pattern 😉
-> You can learn more about the circuit breaker in the optional [exercise 2.6](#26---optional-the-circuit-breaker-pattern) below.
+> You can learn more about the circuit breaker in the optional [exercise 2.7](#27-optional---the-circuit-breaker-pattern) below.
 
 Now, you might wonder how the retry pattern decides what is a success and what is a failure that needs to be re-run.
 
@@ -243,15 +243,15 @@ You can learn more in the following optional exercises or continue to the next e
 A circuit breaker is a pattern that can be used to prevent an application from repeatedly trying to perform an operation that is likely to fail.
 
 This is useful in various ways.
-For example, it ensures that a system which is experiencing issues is not overloaded with requests and has time to recover.
-Also it helps with making sure an application doesn't spend too much time waiting for an operation that is unlikely to finish successfully.
+For example, it ensures that a system, which is experiencing issues is not overloaded with requests and has time to recover.
+Also, it helps with making sure an application doesn't spend too much time waiting for an operation that is unlikely to finish successfully.
 
-The circuit breakers achieves this by measuring the percentage of failures over a given time window.
-If it exceeds a threshold it slows down the rate of operations (similar to the rate-limited) until the failre rate drops down again.
+The circuit breaker achieves this by measuring the percentage of failures over a given time window.
+If it exceeds a threshold, it slows down the rate of operations (similar to the rate-limited) until the failure rate drops down again.
 
 - [ ] 🔨 **Add a circuit breaker to the resilience configuration.**
   - Leverage the failure-rate setting of the frontend to force the circuit breaker to open.
-  - Again, play around with the values (including the other patterns) to try to exceed the rate limit and see how other patterns might interact with the rate limit.
+  - Again, play around with the values (including the other patterns) to try to exceed the rate limit and see how other patterns might interact with the circuit breaker.
 
 <details><summary>Click here to view a solution.</summary>
 
@@ -283,14 +283,14 @@ This example configures a circuit breaker that will prevent requests for 10 seco
 In the previous exercises we have already uncovered some of the interactions between the individual resilience patterns.
 Let's explore them a bit further and outline what to pay attention to.
 
-Effectively, the patterns are applied in a certain order that determines which patterns may influence others.
+Effectively, the patterns are applied in a certain order that determines, which patterns may influence others.
 The ordering is as follows:
 
 > Fallback ( Cache ( Retry ( CircuitBreaker ( RateLimiter ( TimeLimiter ( Bulkhead ( Function ) ) ) ) ) ) )
 
-If you read from left to right it shows you the order in which the aspects will be applied.
+If you read from right to left it shows you the order in which the aspects will be applied.
 For example, an operation may time out on the first run, be retried one more time and again time out, leading to roughly 2x of the timeout duration in total computation time.
-In general, exceptions are also propagated from right to left´, meaning that for example the circuit breaker may open because the rate limit was exceeded too often.
+In general, exceptions are also propagated from right to left, meaning that for example the circuit breaker may open because the rate limit was exceeded too often.
 
 > **Tip:** While it is possible to adjust the order of execution by providing a custom strategy, the above strategy should serve well for most use cases.
 

@@ -92,4 +92,4 @@ var config = ResilienceConfiguration.of(SignupHandler.class)
 
 You've now learned how the SAP Cloud SDK applies tenant and user isolation and how you can configure the behaviour to your needs.
 
-Continue to - [Exercise 6 (Optional) - Deploying the application to SAP Business Technology Platform](../ex6/README.md) if you are interested in learning how to deploy your application to BTP.
+Continue to - [Exercise 6 (Optional) - Deploying the Application to SAP Business Technology Platform](../ex6/README.md) if you are interested in learning how to deploy your application to BTP.
