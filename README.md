@@ -65,7 +65,6 @@ The requirements to follow the exercises in this repository are:
   - [Exercise 4.2 - The Problem with this Approach](exercises/ex4/README.md#42-the-problem-with-this-approach)
   - [Exercise 4.3 - How to Fix the Problem](exercises/ex4/README.md#43-how-to-fix-the-problem)
   - [Exercise 4.4 - Using Resilience Patterns with Async Operations](exercises/ex4/README.md#44-using-resilience-patterns-with-async-operations)
-  - [Exercise 4.5 - Understanding Multi Tenancy and Isolation Options](exercises/ex4/README.md#45-understanding-multi-tenancy-and-isolation-options)
 - [Exercise 5 - Multi-Tenancy and Isolation](exercises/ex5/README.md)
 - [Exercise 6 (Optional) - Deploying the Application to SAP Business Technology Platform](exercises/ex6/README.md)
   - [Exercise 6.1 - Creating a Destination for SuccessFactors API Endpoint and the Synthetic OpenAPI Service](exercises/ex6/README.md#61-creating-a-destination-for-successfactors-api-endpoint-and-the-synthetic-openapi-service)
