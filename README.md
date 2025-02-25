@@ -1,4 +1,4 @@
-[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/teched2023-AD266)](https://api.reuse.software/info/github.com/SAP-samples/teched2023-AD266)
+[![REUSE status](https://api.reuse.software/badge/github.com/sap-samples/teched2023-IN260)](https://api.reuse.software/info/github.com/sap-samples/teched2023-IN260)
 
 # IN260 - Resilient Integration of SAP Solutions on SAP BTP
 
